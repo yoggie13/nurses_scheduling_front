@@ -1,0 +1,22 @@
+.MuiBox-root.css-i9gxme{
+    grid-column: 2;
+}
+#calendar-header{
+    margin-bottom: 20px;
+}
+#calendar-header *{
+    font-weight: bold;
+}
+.Calendar .AutoCompleteComponent{
+    margin-bottom: 30px;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1lzrhuq-MuiPaper-root:hover{
+    background-color: pink;
+    cursor: pointer;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemChecked.css-1lzrhuq-MuiPaper-root{
+    background-color: pink;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemUnChecked.css-1lzrhuq-MuiPaper-root{
+    background-color: white;
+}
