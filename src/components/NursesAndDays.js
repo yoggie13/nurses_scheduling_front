@@ -1,7 +1,8 @@
 import React from 'react'
 import '../assets/styles/NursesAndDays.css'
+import { DeleteForeverRounded } from '@mui/icons-material';
 
-export default function NursesAndDays({ nursesAndDays }) {
+export default function NursesAndDays({ nursesAndDays, deleteNurseDay }) {
     const formatNursesAndDays = () => {
         var arr = [];
         nursesAndDays.forEach(nurDay => {
@@ -31,7 +32,6 @@ export default function NursesAndDays({ nursesAndDays }) {
         });
         return arr;
     }
-
     return (
         <table className='NursesAndDays'>
             <thead>
@@ -40,26 +40,29 @@ export default function NursesAndDays({ nursesAndDays }) {
                     <th>Datum od</th>
                     <th>Datum do</th>
                     <th>Tip</th>
+                    <th>Izbrisati</th>
                 </tr>
             </thead>
             <tbody>
                 {
-                    formatNursesAndDays().map((nurse, index) => <> <tr key={index}>
+                    formatNursesAndDays().map((nurse) => <><tr key={`[${nurse.nurse_id},0]`}>
                         <td rowSpan={nurse.days.length}>{nurse.nurse_name}</td>
                         <td>{nurse.days[0].date_from}</td>
                         <td>{nurse.days[0].date_until}</td>
                         <td>{nurse.days[0].day_type}</td>
+                        <td><DeleteForeverRounded id={`[${nurse.nurse_id},0]`} onClick={e => deleteNurseDay(e)} /></td>
                     </tr>
                         {
-                            nurse.days.slice(1).map((day, index) => <tr key={index}>
+                            nurse.days.slice(1).map((day, index) => <tr key={`[${nurse.nurse_id},${index + 1}]`}>
                                 <td>{day.date_from}</td>
                                 <td>{day.date_until}</td>
                                 <td>{day.day_type}</td>
+                                <td><DeleteForeverRounded id={`[${nurse.nurse_id},${index + 1}]`} onClick={e => deleteNurseDay(e)} /></td>
                             </tr>)
                         }
                     </>)
                 }
             </tbody>
-        </table>
+        </table >
     )
 }

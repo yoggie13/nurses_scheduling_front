@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import AutoCompleteComponent from './AutoCompleteComponent';
 import '../assets/styles/Calendar.css'
 
-export default function Calendar({ dateRange, setDateRange }) {
+export default function Calendar({ calendarDays, setCalendarDays, dateRange, setDateRange, clearCheckedDates }) {
     const months = [
         {
             id: 0,
@@ -60,7 +60,6 @@ export default function Calendar({ dateRange, setDateRange }) {
         },
     ]
     const [chosenMonth, setChosenMonth] = useState();
-    const [days, setDays] = useState();
 
     const getDaysOfTheChosenMonth = () => {
         if (chosenMonth === undefined || chosenMonth === null) return [];
@@ -106,11 +105,16 @@ export default function Calendar({ dateRange, setDateRange }) {
     }
     const handleDateClick = (e) => {
         e.preventDefault();
-        var d = days;
+        var d = calendarDays;
+        if (e.target.innerText === "") return;
         d[e.target.id].checked = true;
         var minDate;
         var maxDate;
+        var firstReal;
         for (let i = 0; i < d.length; i++) {
+            if (firstReal === undefined && d[i].date !== "") {
+                firstReal = i - 1;
+            }
             if (minDate === undefined && d[i].checked) {
                 minDate = i;
             }
@@ -124,8 +128,11 @@ export default function Calendar({ dateRange, setDateRange }) {
                 break;
             }
         }
-        console.log(d)
-        setDays([...d]);
+        setCalendarDays([...d]);
+        setDateRange({
+            date_from: `${minDate - firstReal}.${chosenMonth.id + 1}.${new Date(Date.now()).getFullYear()}`,
+            date_until: `${maxDate - firstReal}.${chosenMonth.id + 1}.${new Date(Date.now()).getFullYear()}`
+        })
     }
 
     useEffect(() => {
@@ -133,9 +140,8 @@ export default function Calendar({ dateRange, setDateRange }) {
     }, [])
 
     useEffect(() => {
-        setDays(getDaysOfTheChosenMonth())
+        setCalendarDays(getDaysOfTheChosenMonth())
     }, [chosenMonth])
-
 
     return (
         <div className='Calendar'>
@@ -174,7 +180,7 @@ export default function Calendar({ dateRange, setDateRange }) {
                     {
                         chosenMonth === undefined || chosenMonth === null
                             ? null
-                            : days.map((day, index) => <Grid item xs={1} id={index} key={index}>
+                            : calendarDays.map((day, index) => <Grid item xs={1} id={index} key={index}>
                                 <Item
                                     id={index}
                                     className={day.checked ? 'ItemChecked' : 'ItemUnchecked'}
@@ -185,6 +191,7 @@ export default function Calendar({ dateRange, setDateRange }) {
                     }
                 </Grid>
             </Box>
+            <button className='MyButton' onClick={e => clearCheckedDates(e)}>Očisti</button>
         </div>
     )
 }

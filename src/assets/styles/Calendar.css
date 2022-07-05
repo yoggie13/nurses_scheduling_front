@@ -20,3 +20,11 @@
 .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemUnChecked.css-1lzrhuq-MuiPaper-root{
     background-color: white;
 }
+.Calendar{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+.Calendar .MyButton{
+    align-self: flex-end;
+}

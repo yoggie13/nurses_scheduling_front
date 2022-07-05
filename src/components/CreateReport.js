@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import '../assets/styles/CreateReport.css'
 import AutoCompleteComponent from './AutoCompleteComponent';
 import Calendar from './Calendar';
@@ -8,11 +8,11 @@ export default function CreateReport() {
     const [nurse, setNurse] = useState();
     const [nurseArr, setNurseArr] = useState([
         {
-            id: 1,
+            id: 0,
             label: "Marina Marinic"
         },
         {
-            id: 2,
+            id: 1,
             label: "Milica Milicic"
         }
     ]);
@@ -20,15 +20,15 @@ export default function CreateReport() {
     const [dayArr, setDayArr] = useState(
         [
             {
-                id: 1,
+                id: 0,
                 label: "Godisnji odmor"
             },
             {
-                id: 2,
+                id: 1,
                 label: "Slobodan dan"
             },
             {
-                id: 3,
+                id: 2,
                 label: "Plaćeni slobodan dan"
             }
         ]
@@ -37,50 +37,81 @@ export default function CreateReport() {
     const [paidDayTypeArr, setPaidDayTypeArr] = useState(
         [
             {
-                id: 1,
+                id: 0,
                 label: "8. mart"
             },
             {
-                id: 2,
+                id: 1,
                 label: "Bonus"
             }
         ]
     );
     const [dateRange, setDateRange] = useState();
-    const [nursesAndDays, setNursesAndDays] = useState([
-        {
-            id: 1,
-            nurse_id: 1,
-            nurse_name: "Marina Marinic",
-            date_from: "1.7.2022",
-            date_until: "3.7.2022",
-            day_type_id: 2,
-            day_type: "Slobodan dan"
-        },
-        {
-            id: 2,
-            nurse_id: 1,
-            nurse_name: "Marina Marinic",
-            date_from: "4.7.2022",
-            date_until: "5.7.2022",
-            day_type_id: 2,
-            day_type: "Slobodan dan"
-        },
-        {
-            id: 2,
-            nurse_id: 2,
-            nurse_name: "Milica Milicic",
-            date_from: "10.7.2022",
-            date_until: "10.7.2022",
-            day_type_id: 2,
-            day_type: "Slobodan dan"
-        }
-    ])
+    const [nursesAndDays, setNursesAndDays] = useState([])
+    const [calendarDays, setCalendarDays] = useState();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const isValid = (field) => {
+        if (field === undefined || field === null)
+            return false;
+        return true;
     }
 
+    const deleteNurseDay = (e) => {
+        e.preventDefault();
+        var id = e.target.id;
+        if (id === undefined || id === null || id === "") {
+            id = e.target.parentNode.id
+        }
+        var n = nursesAndDays;
+        var c = 0;
+        for (let i = 0; i < n.length; i++) {
+            if (`${n[i].nurse_id}` === id.substring(1, id.indexOf(','))) {
+                if (`${c}` === id.substring(id.indexOf(',') + 1, id.indexOf(']'))) {
+                    n.splice(i, 1)
+                    break;
+                }
+                c++;
+            }
+        }
+        setNursesAndDays([...n]);
+    }
+    const clearCheckedDates = (e = undefined) => {
+        if (e !== undefined)
+            e.preventDefault();
+        var d = calendarDays;
+        d.forEach(day => {
+            day.checked = false;
+        });
+        setCalendarDays([...d]);
+        setDateRange(undefined)
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if ((!isValid(nurse) || !isValid(day) || !isValid(dateRange)) || (day.id === 3 && !isValid(paidDayType))) {
+            alert("Nisu popunjeni svi podaci");
+            return;
+        }
+        var nurseDay = {
+            id: nursesAndDays.length,
+            nurse_id: nurse.id,
+            nurse_name: nurse.label,
+            date_from: dateRange.date_from,
+            date_until: dateRange.date_until,
+            day_type_id: day.id,
+            day_type: day.label
+        }
+        if (nurseDay.day_type_id === 2) {
+            nurseDay.paidDayType_id = paidDayType.id;
+            nurseDay.day_type = nurseDay.day_type + '/' + paidDayType.label;
+        }
+        var n = nursesAndDays
+        n.push(nurseDay)
+        setNursesAndDays([...n])
+
+        setPaidDayType(undefined)
+        clearCheckedDates()
+    }
 
     return (
         <div className='CreateReport'>
@@ -107,16 +138,19 @@ export default function CreateReport() {
                     setValue={setPaidDayType}
                     menuItems={paidDayTypeArr}
                 />
-                <button onClick={e => { handleSubmit(e) }}>Unesi</button>
+                <button className='MyButton' onClick={e => { handleSubmit(e) }}>Unesi</button>
             </div>
             <Calendar
                 dateRange={dateRange}
                 setDateRange={setDateRange}
+                calendarDays={calendarDays}
+                setCalendarDays={setCalendarDays}
+                clearCheckedDates={clearCheckedDates}
             />
             <NursesAndDays
                 nursesAndDays={nursesAndDays}
+                deleteNurseDay={deleteNurseDay}
             />
-
         </div >
     )
 }

@@ -29,3 +29,7 @@ table tr:last-child td:last-child {
 th,td{
     font-family: "Roboto","Helvetica","Arial",sans-serif;
 }
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root:hover{
+    cursor: pointer;
+    color: red;
+}
