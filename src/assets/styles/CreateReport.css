@@ -6,9 +6,10 @@
     grid-column: 1;
     display: flex;
     flex-direction: column;
+    margin-right: 40px;
 }
 .DataInput .AutoCompleteComponent {
-    width: 400px;
+    width: 100%;
     margin-bottom: 10px;
 }
 .MyButton{
@@ -19,6 +20,8 @@
     padding: 10px 20px 10px 20px;
     border: 1px solid lightgray;
     margin-top: 20px;
+    margin-bottom: 50px;
+    align-self: flex-end;
 }
 .MyButton:hover{
     cursor: pointer;
@@ -31,6 +34,7 @@
 }
 .DataInput{
     margin-bottom: 25px;
+    margin-right: 0px;
 }
 .DataInput .AutoCompleteComponent {
     width: 100%;

@@ -151,6 +151,7 @@ export default function CreateReport() {
                 nursesAndDays={nursesAndDays}
                 deleteNurseDay={deleteNurseDay}
             />
+            <button className='MyButton'>Potvrdi</button>
         </div >
     )
 }
