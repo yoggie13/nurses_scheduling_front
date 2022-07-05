@@ -115,7 +115,7 @@ export default function CreateReport() {
 
     return (
         <div className='CreateReport'>
-            <h1>Kreiranja rasporeda</h1>
+            <h1>Kreiranje rasporeda</h1>
             <div className='DataInput'>
                 <AutoCompleteComponent
                     id='nurse-select'

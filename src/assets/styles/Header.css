@@ -27,3 +27,9 @@
 .Header a:hover{
     cursor: pointer;
 }
+
+@media only screen and (max-width: 700px){
+    .Header ul li{
+        margin-left: 30px;
+    }
+}
