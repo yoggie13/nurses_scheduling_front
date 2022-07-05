@@ -3,8 +3,7 @@
     flex-direction: row;
     align-items: center;
     padding:5px 15px 5px 20px;
-    position: absolute;
-    right: 20px;
+    position: fixed;
     top:80px;
     z-index: 2;
     border-radius: 4px;
@@ -12,6 +11,8 @@
     width: fit-content;
     height: 30px;
     font-size: 16px;
+    animation: float_out 1s 2.5s;
+    right: 50px;
 }
 .Notification p{
     margin-left: 14px;
@@ -22,3 +23,18 @@ background-color: rgb(3, 165, 3);
 #error{
     background-color: red;
 }
+@keyframes float_out {
+    from {right: 50px;}
+    to {right: -1000px;}
+  }
+
+  @media only screen and (max-width: 400px){
+    .Notification{
+        right: 20px;
+        font-size: 14px;
+    }
+    @keyframes float_out {
+        from {right: 20px;}
+        to {right: -1000px;}
+      }
+  }

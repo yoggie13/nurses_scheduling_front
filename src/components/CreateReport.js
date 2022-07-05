@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../assets/styles/CreateReport.css'
 import AutoCompleteComponent from './AutoCompleteComponent';
 import Calendar from './Calendar';
