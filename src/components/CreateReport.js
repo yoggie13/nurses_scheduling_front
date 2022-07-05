@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import '../assets/styles/CreateReport.css'
 import AutoCompleteComponent from './AutoCompleteComponent';
 import Calendar from './Calendar';
 import NursesAndDays from './NursesAndDays';
+import Notification from './Notification';
 
 export default function CreateReport() {
     const [nurse, setNurse] = useState();
@@ -49,12 +50,21 @@ export default function CreateReport() {
     const [dateRange, setDateRange] = useState();
     const [nursesAndDays, setNursesAndDays] = useState([])
     const [calendarDays, setCalendarDays] = useState();
+    const [alert, setAlert] = useState();
 
     const isValid = (field) => {
         if (field === undefined || field === null)
             return false;
         return true;
     }
+
+    useEffect(() => {
+        if (alert !== undefined && alert !== null) {
+            setTimeout(() => {
+                setAlert(undefined)
+            }, 3000)
+        }
+    }, [alert])
 
     const deleteNurseDay = (e) => {
         e.preventDefault();
@@ -89,7 +99,10 @@ export default function CreateReport() {
         e.preventDefault();
 
         if ((!isValid(nurse) || !isValid(day) || !isValid(dateRange)) || (day.id === 3 && !isValid(paidDayType))) {
-            alert("Nisu popunjeni svi podaci");
+            setAlert({
+                success: false,
+                message: "Nisu popunjeni svi podaci"
+            });
             return;
         }
         var nurseDay = {
@@ -152,6 +165,14 @@ export default function CreateReport() {
                 deleteNurseDay={deleteNurseDay}
             />
             <button className='MyButton'>Potvrdi</button>
+            {
+                alert !== undefined && alert !== null
+                    ? <Notification
+                        success={alert.success}
+                        message={alert.message}
+                    />
+                    : null
+            }
         </div >
     )
 }
