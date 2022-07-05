@@ -1,0 +1,29 @@
+.Header{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    width: 100%;
+    justify-content: space-between;
+}
+.Header ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.Header ul li{
+    margin-left: 40px;
+    text-align: right;
+}
+.Header img {
+    width: 70px;
+    height: 70px;
+}
+.Header a{
+    text-decoration: none;
+    font-family: 'Roboto';
+    color: black;
+}
+.Header a:hover{
+    cursor: pointer;
+}
