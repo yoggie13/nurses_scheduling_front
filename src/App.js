@@ -8,7 +8,7 @@ import './App.css';
 import CreateReport from './components/CreateReport';
 import AllReports from './components/AllReports';
 import Header from './components/Header';
-import Report from "./components/Report";
+import ReportContainer from "./components/ReportContainer";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path='/izvestaji/:reportID' element={<Report />} />
+          <Route path='/izvestaji/:reportID' element={<ReportContainer />} />
           <Route path='/izvestaji' element={<AllReports />} />
           <Route path='/' element={<CreateReport />} />
         </Routes>

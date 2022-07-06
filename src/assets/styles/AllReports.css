@@ -6,3 +6,9 @@
 .AllReportsTable{
     width: 100%;
 }
+.AllReports .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root{
+    color:gray;
+}
+.AllReports .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root:hover{
+    color:rgb(248, 176, 188);
+}

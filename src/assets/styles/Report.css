@@ -1,10 +1,43 @@
-.Report{
-    padding: 0 1px 0 1px;
-    min-width: 1200px;
+.report-container-main{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+.report-container-main .print-button{
+    align-self: flex-end;
 }
 .report-container{
     overflow-x: auto;
     scroll-behavior: smooth;
+}
+.Report{
+    padding: 0 1px 0 1px;
+    min-width: 1200px;
+}
+.report-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.print-button{
+    border: 1px solid black;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    padding: 6px 12px 6px 12px;
+    margin-bottom: 40px;
+    justify-content: space-between;
+    width: 110px;
+    margin-left: 30px;
+}
+.print-button:hover{
+    cursor: pointer;
+    background-color: pink;
+    border: pink;
+    color: white;
+}
+.print-button .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root:hover{
+    color:white;
 }
 .ReportTable{
     width: 100%;
@@ -20,7 +53,7 @@ th:not(:first-child){
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 100px;
+    margin-top: 60px;
     margin-bottom: 50px;
     align-items: flex-end;
     font-size: 16px;
@@ -45,3 +78,15 @@ th:not(:first-child){
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
   }
+  
+  @page{
+    margin: 10px 40px 20px 40px;
+    size: 297mm 210mm;
+  }
+
+  @media print{
+    body{
+        zoom: 0.55;
+    }
+  }
+  
