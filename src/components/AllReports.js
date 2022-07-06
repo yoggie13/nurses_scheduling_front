@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import '../assets/styles/AllReports.css'
 
@@ -36,11 +37,15 @@ export default function AllReports() {
                             <td>{report.name}</td>
                             <td>{report.date}</td>
                             <td>{report.percentage}</td>
-                            <td><ArrowForwardIosIcon /></td>
+                            <td>
+                                <Link to='/izvestaji/1'>
+                                    <ArrowForwardIosIcon />
+                                </Link>
+                            </td>
                         </tr>)
                     }
                 </tbody>
             </table>
-        </div>
+        </div >
     )
 }

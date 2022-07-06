@@ -1,0 +1,47 @@
+.Report{
+    padding: 0 1px 0 1px;
+    min-width: 1200px;
+}
+.report-container{
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+.ReportTable{
+    width: 100%;
+}
+th:first-child{
+    width:60px;
+}
+th:not(:first-child){
+    width: 30px;
+    max-width:30px;
+}
+.Signature{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 100px;
+    margin-bottom: 50px;
+    align-items: flex-end;
+    font-size: 16px;
+}
+.Signature .alignLeft{
+    margin-left: 75px;
+}
+.Signature .alignRight{
+    margin-right: 75px;
+}
+::-webkit-scrollbar {
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar {
+    border-radius: 4px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
