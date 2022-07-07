@@ -4,6 +4,7 @@ import AutoCompleteComponent from './AutoCompleteComponent';
 import Calendar from './Calendar';
 import NursesAndDays from './NursesAndDays';
 import Notification from './Notification';
+import services from '../services/services';
 
 export default function CreateReport() {
     const [nurse, setNurse] = useState();
@@ -51,6 +52,7 @@ export default function CreateReport() {
     const [nursesAndDays, setNursesAndDays] = useState([])
     const [calendarDays, setCalendarDays] = useState();
     const [alert, setAlert] = useState();
+    const [loading, setLoading] = useState();
 
     const isValid = (field) => {
         if (field === undefined || field === null)
@@ -65,6 +67,25 @@ export default function CreateReport() {
             }, 3000)
         }
     }, [alert])
+
+    useEffect(() => {
+        setLoading(true)
+        getNurses()
+    }, [])
+    const getNurses = async () => {
+        var res = await services.GetNurses();
+
+        if (res.status === 200) {
+            res.json()
+                .then((response) => {
+                    setNurseArr(response);
+                    setLoading(false);
+                })
+        }
+        else {
+            console.log('error')
+        }
+    }
 
     const deleteNurseDay = (e) => {
         e.preventDefault();
@@ -127,52 +148,58 @@ export default function CreateReport() {
     }
 
     return (
-        <div className='CreateReport'>
-            <h1>Kreiranje rasporeda</h1>
-            <div className='DataInput'>
-                <AutoCompleteComponent
-                    id='nurse-select'
-                    label="Sestra/Tehničar"
-                    value={nurse}
-                    setValue={setNurse}
-                    menuItems={nurseArr}
-                />
-                <AutoCompleteComponent
-                    id='day-select'
-                    label="Tip dana"
-                    value={day}
-                    setValue={setDay}
-                    menuItems={dayArr}
-                />
-                <AutoCompleteComponent
-                    id='pait-day-type-select'
-                    label="Tip plaćenog dana"
-                    value={paidDayType}
-                    setValue={setPaidDayType}
-                    menuItems={paidDayTypeArr}
-                />
-                <button className='MyButton' onClick={e => { handleSubmit(e) }}>Unesi</button>
-            </div>
-            <Calendar
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-                calendarDays={calendarDays}
-                setCalendarDays={setCalendarDays}
-                clearCheckedDates={clearCheckedDates}
-            />
-            <NursesAndDays
-                nursesAndDays={nursesAndDays}
-                deleteNurseDay={deleteNurseDay}
-            />
-            <button className='MyButton'>Potvrdi</button>
+        <>
             {
-                alert !== undefined && alert !== null
-                    ? <Notification
-                        success={alert.success}
-                        message={alert.message}
-                    />
-                    : null
+                loading
+                    ? null
+                    : <div className='CreateReport'>
+                        <h1>Kreiranje rasporeda</h1>
+                        <div className='DataInput'>
+                            <AutoCompleteComponent
+                                id='nurse-select'
+                                label="Sestra/Tehničar"
+                                value={nurse}
+                                setValue={setNurse}
+                                menuItems={nurseArr}
+                            />
+                            <AutoCompleteComponent
+                                id='day-select'
+                                label="Tip dana"
+                                value={day}
+                                setValue={setDay}
+                                menuItems={dayArr}
+                            />
+                            <AutoCompleteComponent
+                                id='pait-day-type-select'
+                                label="Tip plaćenog dana"
+                                value={paidDayType}
+                                setValue={setPaidDayType}
+                                menuItems={paidDayTypeArr}
+                            />
+                            <button className='MyButton' onClick={e => { handleSubmit(e) }}>Unesi</button>
+                        </div>
+                        <Calendar
+                            dateRange={dateRange}
+                            setDateRange={setDateRange}
+                            calendarDays={calendarDays}
+                            setCalendarDays={setCalendarDays}
+                            clearCheckedDates={clearCheckedDates}
+                        />
+                        <NursesAndDays
+                            nursesAndDays={nursesAndDays}
+                            deleteNurseDay={deleteNurseDay}
+                        />
+                        <button className='MyButton'>Potvrdi</button>
+                        {
+                            alert !== undefined && alert !== null
+                                ? <Notification
+                                    success={alert.success}
+                                    message={alert.message}
+                                />
+                                : null
+                        }
+                    </div >
             }
-        </div >
+        </>
     )
 }
