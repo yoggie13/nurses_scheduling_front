@@ -5,6 +5,7 @@ import Calendar from './Calendar';
 import NursesAndDays from './NursesAndDays';
 import Notification from './Notification';
 import services from '../services/services';
+import Loading from './Loading';
 
 export default function CreateReport() {
     const [nurse, setNurse] = useState();
@@ -151,7 +152,7 @@ export default function CreateReport() {
         <>
             {
                 loading
-                    ? null
+                    ? <Loading />
                     : <div className='CreateReport'>
                         <h1>Kreiranje rasporeda</h1>
                         <div className='DataInput'>
