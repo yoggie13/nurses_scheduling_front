@@ -76,6 +76,14 @@ export default function CreateReport() {
     const getNurses = async () => {
         var res = await services.GetNurses();
 
+        if (res === undefined) {
+            setAlert({
+                success: false,
+                message: "Greška pri učitavanju"
+            })
+            return;
+        }
+
         if (res.status === 200) {
             res.json()
                 .then((response) => {
@@ -84,7 +92,10 @@ export default function CreateReport() {
                 })
         }
         else {
-            console.log('error')
+            setAlert({
+                success: false,
+                message: "Greška pri učitavanju"
+            })
         }
     }
 
@@ -151,6 +162,14 @@ export default function CreateReport() {
     return (
         <>
             {
+                alert !== undefined && alert !== null
+                    ? <Notification
+                        success={alert.success}
+                        message={alert.message}
+                    />
+                    : null
+            }
+            {
                 loading
                     ? <Loading />
                     : <div className='CreateReport'>
@@ -191,14 +210,6 @@ export default function CreateReport() {
                             deleteNurseDay={deleteNurseDay}
                         />
                         <button className='MyButton'>Potvrdi</button>
-                        {
-                            alert !== undefined && alert !== null
-                                ? <Notification
-                                    success={alert.success}
-                                    message={alert.message}
-                                />
-                                : null
-                        }
                     </div >
             }
         </>
