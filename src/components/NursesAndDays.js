@@ -8,11 +8,11 @@ export default function NursesAndDays({ nursesAndDays, deleteNurseDay }) {
         nursesAndDays.forEach(nurDay => {
             let found = false;
             for (let i = 0; i < arr.length; i++) {
-                if (arr[i].nurse_id === nurDay.nurse_id) {
+                if (arr[i].NurseID === nurDay.NurseID) {
                     arr[i].days.push({
-                        date_from: nurDay.date_from,
-                        date_until: nurDay.date_until,
-                        day_type: nurDay.day_type
+                        Date_From: nurDay.Date_From,
+                        Date_Until: nurDay.Date_Until,
+                        Day_Type_Label: nurDay.Day_Type_Label
                     })
                     found = true;
                     break;
@@ -20,12 +20,12 @@ export default function NursesAndDays({ nursesAndDays, deleteNurseDay }) {
             }
             if (!found) {
                 arr.push({
-                    nurse_id: nurDay.nurse_id,
-                    nurse_name: nurDay.nurse_name,
+                    NurseID: nurDay.NurseID,
+                    Nurse_Name: nurDay.Nurse_Name,
                     days: [{
-                        date_from: nurDay.date_from,
-                        date_until: nurDay.date_until,
-                        day_type: nurDay.day_type
+                        Date_From: nurDay.Date_From,
+                        Date_Until: nurDay.Date_Until,
+                        Day_Type_Label: nurDay.Day_Type_Label
                     }]
                 })
             }
@@ -45,19 +45,19 @@ export default function NursesAndDays({ nursesAndDays, deleteNurseDay }) {
             </thead>
             <tbody>
                 {
-                    formatNursesAndDays().map((nurse) => <><tr key={`[${nurse.nurse_id},0]`}>
-                        <td rowSpan={nurse.days.length}>{nurse.nurse_name}</td>
-                        <td>{nurse.days[0].date_from}</td>
-                        <td>{nurse.days[0].date_until}</td>
-                        <td>{nurse.days[0].day_type}</td>
-                        <td><DeleteForeverRounded id={`[${nurse.nurse_id},0]`} onClick={e => deleteNurseDay(e)} /></td>
+                    formatNursesAndDays().map((nurse) => <><tr key={`[${nurse.NurseID},0]`}>
+                        <td rowSpan={nurse.days.length}>{nurse.Nurse_Name}</td>
+                        <td>{nurse.days[0].Date_From}</td>
+                        <td>{nurse.days[0].Date_Until}</td>
+                        <td>{nurse.days[0].Day_Type_Label}</td>
+                        <td><DeleteForeverRounded id={`[${nurse.NurseID},0]`} onClick={e => deleteNurseDay(e)} /></td>
                     </tr>
                         {
-                            nurse.days.slice(1).map((day, index) => <tr key={`[${nurse.nurse_id},${index + 1}]`}>
-                                <td>{day.date_from}</td>
-                                <td>{day.date_until}</td>
-                                <td>{day.day_type}</td>
-                                <td><DeleteForeverRounded id={`[${nurse.nurse_id},${index + 1}]`} onClick={e => deleteNurseDay(e)} /></td>
+                            nurse.days.slice(1).map((day, index) => <tr key={`[${nurse.NurseID},${index + 1}]`}>
+                                <td>{day.Date_From}</td>
+                                <td>{day.Date_Until}</td>
+                                <td>{day.Day_Type_Label}</td>
+                                <td><DeleteForeverRounded id={`[${nurse.NurseID},${index + 1}]`} onClick={e => deleteNurseDay(e)} /></td>
                             </tr>)
                         }
                     </>)

@@ -27,6 +27,16 @@
     cursor: pointer;
     background-color: aquamarine;
 }
+.name-submit {
+    display: flex;
+    flex-direction: row;
+}
+.name-submit #standard-basic{
+    width: 400px;
+}
+.name-submit .MyButton {
+    margin-left: 30px;
+}
 @media only screen and (max-width: 1300px){
 .CreateReport{
     display: flex;
@@ -39,5 +49,11 @@
 .DataInput .AutoCompleteComponent {
     width: 100%;
     margin-bottom: 10px;
+}
+}
+@media only screen and (max-width: 500px){
+
+.name-submit #standard-basic{
+    width: 220px;
 }
 }

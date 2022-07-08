@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../assets/styles/CreateReport.css'
 import AutoCompleteComponent from './AutoCompleteComponent';
+import { TextField } from '@mui/material';
 import Calendar from './Calendar';
 import NursesAndDays from './NursesAndDays';
 import Notification from './Notification';
@@ -36,24 +37,12 @@ export default function CreateReport() {
             }
         ]
     );
-    const [paidDayType, setPaidDayType] = useState();
-    const [paidDayTypeArr, setPaidDayTypeArr] = useState(
-        [
-            {
-                id: 0,
-                label: "8. mart"
-            },
-            {
-                id: 1,
-                label: "Bonus"
-            }
-        ]
-    );
     const [dateRange, setDateRange] = useState();
     const [nursesAndDays, setNursesAndDays] = useState([])
     const [calendarDays, setCalendarDays] = useState();
     const [alert, setAlert] = useState();
     const [loading, setLoading] = useState();
+    const [name, setName] = useState();
 
     const isValid = (field) => {
         if (field === undefined || field === null)
@@ -72,6 +61,7 @@ export default function CreateReport() {
     useEffect(() => {
         setLoading(true)
         getNurses()
+        getDays()
     }, [])
     const getNurses = async () => {
         var res = await services.GetNurses();
@@ -98,7 +88,31 @@ export default function CreateReport() {
             })
         }
     }
+    const getDays = async () => {
+        var res = await services.GetDays();
 
+        if (res === undefined) {
+            setAlert({
+                success: false,
+                message: "Greška pri učitavanju"
+            })
+            return;
+        }
+
+        if (res.status === 200) {
+            res.json()
+                .then((response) => {
+                    setDayArr(response);
+                    setLoading(false);
+                })
+        }
+        else {
+            setAlert({
+                success: false,
+                message: "Greška pri učitavanju"
+            })
+        }
+    }
     const deleteNurseDay = (e) => {
         e.preventDefault();
         var id = e.target.id;
@@ -108,7 +122,7 @@ export default function CreateReport() {
         var n = nursesAndDays;
         var c = 0;
         for (let i = 0; i < n.length; i++) {
-            if (`${n[i].nurse_id}` === id.substring(1, id.indexOf(','))) {
+            if (`${n[i].NurseID}` === id.substring(1, id.indexOf(','))) {
                 if (`${c}` === id.substring(id.indexOf(',') + 1, id.indexOf(']'))) {
                     n.splice(i, 1)
                     break;
@@ -131,7 +145,7 @@ export default function CreateReport() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if ((!isValid(nurse) || !isValid(day) || !isValid(dateRange)) || (day.id === 3 && !isValid(paidDayType))) {
+        if ((!isValid(nurse) || !isValid(day) || !isValid(dateRange))) {
             setAlert({
                 success: false,
                 message: "Nisu popunjeni svi podaci"
@@ -140,25 +154,72 @@ export default function CreateReport() {
         }
         var nurseDay = {
             id: nursesAndDays.length,
-            nurse_id: nurse.id,
-            nurse_name: nurse.label,
-            date_from: dateRange.date_from,
-            date_until: dateRange.date_until,
-            day_type_id: day.id,
-            day_type: day.label
+            NurseID: nurse.id,
+            Nurse_Name: nurse.label,
+            Date_From: dateRange.date_from,
+            Date_Until: dateRange.date_until,
+            Day_Type: day.id,
+            Day_Type_Label: day.label
         }
-        if (nurseDay.day_type_id === 2) {
-            nurseDay.paidDayType_id = paidDayType.id;
-            nurseDay.day_type = nurseDay.day_type + '/' + paidDayType.label;
-        }
+
         var n = nursesAndDays
         n.push(nurseDay)
         setNursesAndDays([...n])
-
-        setPaidDayType(undefined)
         clearCheckedDates()
     }
+    const formatBack = (date) => {
+        var a = date.split(".")
+        var y = a.pop();
+        var m = a.pop();
+        var d = a.pop();
 
+        return new Date(new Date(Date.parse(`${m}/${d}/${y}`)).setHours(6)).toISOString();
+    }
+    const formatForSending = () => {
+        var n = []
+        nursesAndDays.forEach((nd) => {
+            n.push({
+                Date_From: formatBack(nd.Date_From),
+                Date_Until: formatBack(nd.Date_Until),
+                NurseID: nd.NurseID,
+                Day_Type: nd.Day_Type
+            });
+        })
+
+        return n;
+    }
+    const handleSave = async (e) => {
+
+        if (!isValid(name)) {
+            setAlert({
+                success: false,
+                message: "Nije unet naziv"
+            })
+            return;
+        }
+
+        var res = await services.TryNewReport(name, formatForSending());
+
+        if (res === undefined) {
+            setAlert({
+                success: false,
+                message: "Nije uspelo"
+            })
+        }
+
+        if (res.status === 200) {
+            setAlert({
+                success: true,
+                message: "Uspelo, uskoro izveštaj"
+            });
+        }
+        else {
+            setAlert({
+                success: false,
+                message: "Nije uspelo"
+            })
+        }
+    }
     return (
         <>
             {
@@ -189,13 +250,6 @@ export default function CreateReport() {
                                 setValue={setDay}
                                 menuItems={dayArr}
                             />
-                            <AutoCompleteComponent
-                                id='pait-day-type-select'
-                                label="Tip plaćenog dana"
-                                value={paidDayType}
-                                setValue={setPaidDayType}
-                                menuItems={paidDayTypeArr}
-                            />
                             <button className='MyButton' onClick={e => { handleSubmit(e) }}>Unesi</button>
                         </div>
                         <Calendar
@@ -209,7 +263,15 @@ export default function CreateReport() {
                             nursesAndDays={nursesAndDays}
                             deleteNurseDay={deleteNurseDay}
                         />
-                        <button className='MyButton'>Potvrdi</button>
+                        <div className='name-submit'>
+                            <TextField id="standard-basic"
+                                label="Naziv izveštaja"
+                                variant="standard"
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                            />
+                            <button className='MyButton' onClick={e => handleSave(e)}>Potvrdi</button>
+                        </div>
                     </div >
             }
         </>
