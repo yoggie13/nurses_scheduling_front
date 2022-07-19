@@ -1,6 +1,14 @@
 const { query } = require("express");
 const express = require("express");
 var mysql = require("mysql");
+var cors = require('cors');
+
+var corsOptions = {
+    origin: 'http://example.com',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -17,6 +25,9 @@ connection.connect((err) => {
 const PORT = process.env.PORT || 3001;
 
 const app = express();
+
+app.options("nurses/", cors());
+app.use(cors())
 
 const checkIfRequestEmpty = (req) => {
     return req === undefined
@@ -52,13 +63,35 @@ app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
 
-app.get('/nurses', (req, res) => {
+app.get('/nursesForSelect', (req, res) => {
     connection.query("SELECT * FROM nurses", (err, result, fields) => {
         if (err) {
             res.status(400).send("Greška pri čitanju podataka iz baze");
         }
-        res.json(result);
+        var ret = [];
+        result.forEach((nurse) => {
+            ret.push({
+                id: nurse.NurseID,
+                label: `${nurse.Name} ${nurse.Surname}`
+            })
+        })
+        res.json(ret);
     });
+})
+app.get('/daysForSelect', (req, res) => {
+    connection.query("SELECT * FROM nonworkingdaytypes", (err, result, fields) => {
+        if (err) {
+            res.status(400).send("Greška pri učitavanju podataka iz baze")
+        }
+        var ret = [];
+        result.forEach((day) => {
+            ret.push({
+                id: day.NonWorkingDayTypeID,
+                label: day.Name
+            })
+        })
+        res.json(ret)
+    })
 })
 
 app.post('/nurses', (req, res) => {
@@ -93,3 +126,4 @@ app.get('/parameters', (req, res) => {
         res.json(result);
     });
 })
+

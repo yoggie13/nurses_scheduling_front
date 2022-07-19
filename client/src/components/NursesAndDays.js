@@ -3,6 +3,21 @@ import '../assets/styles/NursesAndDays.css'
 import { DeleteForeverRounded } from '@mui/icons-material';
 
 export default function NursesAndDays({ nursesAndDays, deleteNurseDay }) {
+    const formatDayTypeShifts = (day_type, shifts) => {
+        if (shifts === 'all')
+            return day_type;
+
+        var s = '';
+        for (let i = 0; i < shifts.length; i++) {
+            if (shifts[i]) {
+                if (s === '')
+                    s += `${i + 1}`
+                else
+                    s += ` / ${i + 1}`
+            }
+        }
+        return s;
+    }
     const formatNursesAndDays = () => {
         var arr = [];
         nursesAndDays.forEach(nurDay => {
@@ -12,7 +27,8 @@ export default function NursesAndDays({ nursesAndDays, deleteNurseDay }) {
                     arr[i].days.push({
                         Date_From: nurDay.Date_From,
                         Date_Until: nurDay.Date_Until,
-                        Day_Type_Label: nurDay.Day_Type_Label
+                        Day_Type_Label: formatDayTypeShifts(nurDay.Day_Type_Label, nurDay.Shifts),
+                        IsMandatory: nurDay.IsMandatory ? "Obavezno" : "Opciono"
                     })
                     found = true;
                     break;
@@ -25,7 +41,8 @@ export default function NursesAndDays({ nursesAndDays, deleteNurseDay }) {
                     days: [{
                         Date_From: nurDay.Date_From,
                         Date_Until: nurDay.Date_Until,
-                        Day_Type_Label: nurDay.Day_Type_Label
+                        Day_Type_Label: formatDayTypeShifts(nurDay.Day_Type_Label, nurDay.Shifts),
+                        IsMandatory: nurDay.IsMandatory ? "Obavezno" : "Opciono"
                     }]
                 })
             }
@@ -39,7 +56,8 @@ export default function NursesAndDays({ nursesAndDays, deleteNurseDay }) {
                     <th>Sestra</th>
                     <th>Datum od</th>
                     <th>Datum do</th>
-                    <th>Tip</th>
+                    <th>Tip / Smene</th>
+                    <th>Obavezno / Opciono</th>
                     <th>Izbrisati</th>
                 </tr>
             </thead>
@@ -50,6 +68,7 @@ export default function NursesAndDays({ nursesAndDays, deleteNurseDay }) {
                         <td>{nurse.days[0].Date_From}</td>
                         <td>{nurse.days[0].Date_Until}</td>
                         <td>{nurse.days[0].Day_Type_Label}</td>
+                        <td>{nurse.days[0].IsMandatory}</td>
                         <td><DeleteForeverRounded id={`[${nurse.NurseID},0]`} onClick={e => deleteNurseDay(e)} /></td>
                     </tr>
                         {
@@ -57,6 +76,7 @@ export default function NursesAndDays({ nursesAndDays, deleteNurseDay }) {
                                 <td>{day.Date_From}</td>
                                 <td>{day.Date_Until}</td>
                                 <td>{day.Day_Type_Label}</td>
+                                <td>{day.IsMandatory}</td>
                                 <td><DeleteForeverRounded id={`[${nurse.NurseID},${index + 1}]`} onClick={e => deleteNurseDay(e)} /></td>
                             </tr>)
                         }

@@ -1,11 +1,11 @@
 import api from "./api";
 
 export default class services {
-    static GetNurses = async () => {
-        return await api.GET("nurses/");
+    static GetNursesForSelect = async () => {
+        return await api.GET("nursesForSelect/");
     }
-    static GetDays = async () => {
-        return await api.GET("days/");
+    static GetDaysForSelect = async () => {
+        return await api.GET("daysForSelect/");
     }
     static TryNewReport = async (name, data) => {
         return await api.POST("requests/" + name, data);

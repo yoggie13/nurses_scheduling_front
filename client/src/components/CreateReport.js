@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import '../assets/styles/CreateReport.css'
 import AutoCompleteComponent from './AutoCompleteComponent';
-import { TextField } from '@mui/material';
+import { FormControlLabel, FormGroup, TextField } from '@mui/material';
+import Switch from '@mui/material/Switch';
 import Calendar from './Calendar';
 import NursesAndDays from './NursesAndDays';
 import Notification from './Notification';
 import services from '../services/services';
 import Loading from './Loading';
+import ShiftPicker from './ShiftPicker';
 
 export default function CreateReport() {
-    const [nurse, setNurse] = useState();
+    const [nurse, setNurse] = useState("");
     const [nurseArr, setNurseArr] = useState([
         {
             id: 0,
@@ -20,7 +22,7 @@ export default function CreateReport() {
             label: "Milica Milicic"
         }
     ]);
-    const [day, setDay] = useState();
+    const [day, setDay] = useState("");
     const [dayArr, setDayArr] = useState(
         [
             {
@@ -43,6 +45,9 @@ export default function CreateReport() {
     const [alert, setAlert] = useState();
     const [loading, setLoading] = useState();
     const [name, setName] = useState();
+    const [isMandatory, setIsMandatory] = useState(true);
+    const [allShifts, setAllShifts] = useState(true);
+    const [shiftPick, setShiftPick] = useState([false, false, false]);
 
     const isValid = (field) => {
         if (field === undefined || field === null)
@@ -63,8 +68,9 @@ export default function CreateReport() {
         getNurses()
         getDays()
     }, [])
+
     const getNurses = async () => {
-        var res = await services.GetNurses();
+        var res = await services.GetNursesForSelect();
 
         if (res === undefined) {
             setAlert({
@@ -89,7 +95,7 @@ export default function CreateReport() {
         }
     }
     const getDays = async () => {
-        var res = await services.GetDays();
+        var res = await services.GetDaysForSelect();
 
         if (res === undefined) {
             setAlert({
@@ -145,7 +151,10 @@ export default function CreateReport() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if ((!isValid(nurse) || !isValid(day) || !isValid(dateRange))) {
+        if ((!isValid(nurse)
+            || !isValid(dateRange))
+            || (allShifts && !isValid(day))
+            || (!allShifts && !shiftPick[0] && !shiftPick[1] && !shiftPick[2])) {
             setAlert({
                 success: false,
                 message: "Nisu popunjeni svi podaci"
@@ -158,14 +167,28 @@ export default function CreateReport() {
             Nurse_Name: nurse.label,
             Date_From: dateRange.date_from,
             Date_Until: dateRange.date_until,
-            Day_Type: day.id,
-            Day_Type_Label: day.label
+            Day_Type: day === undefined ? undefined : day.id,
+            Day_Type_Label: day === undefined ? undefined : day.label,
+            Shifts: allShifts ? 'all' : shiftPick,
+            IsMandatory: isMandatory
         }
 
         var n = nursesAndDays
         n.push(nurseDay)
         setNursesAndDays([...n])
+        setDefault();
+    }
+    useEffect(() => {
+        if (!allShifts)
+            setDay(undefined)
+    }, [allShifts])
+    const setDefault = () => {
+        setNurse()
+        setDay()
         clearCheckedDates()
+        setShiftPick([false, false, false])
+        setIsMandatory(true)
+        setAllShifts(true)
     }
     const formatBack = (date) => {
         var a = date.split(".")
@@ -249,7 +272,36 @@ export default function CreateReport() {
                                 value={day}
                                 setValue={setDay}
                                 menuItems={dayArr}
+                                readOnly={!allShifts}
                             />
+                            <FormGroup>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={isMandatory}
+                                            onChange={(e) => setIsMandatory(e.target.checked)}
+                                        />
+                                    }
+                                    label="Obavezan" />
+                            </FormGroup>
+                            <FormGroup>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={allShifts}
+                                            onChange={(e) => setAllShifts(e.target.checked)}
+                                        />
+                                    }
+                                    label="Sve smene" />
+                            </FormGroup>
+                            {
+                                !allShifts
+                                    ? <ShiftPicker
+                                        shiftPick={shiftPick}
+                                        setShiftPick={setShiftPick}
+                                    />
+                                    : null
+                            }
                             <button className='MyButton' onClick={e => { handleSubmit(e) }}>Unesi</button>
                         </div>
                         <Calendar
@@ -258,6 +310,7 @@ export default function CreateReport() {
                             calendarDays={calendarDays}
                             setCalendarDays={setCalendarDays}
                             clearCheckedDates={clearCheckedDates}
+                            isMandatory={isMandatory}
                         />
                         <NursesAndDays
                             nursesAndDays={nursesAndDays}

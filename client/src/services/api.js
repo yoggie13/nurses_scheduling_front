@@ -4,7 +4,7 @@ const headers_main = {
     'Access-Control-Allow-Credentials': true,
     'Access-Control-Allow-Headers': 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept',
     'Access-Control-Allow-Origin': '*',
-    "withCredentials": "include"
+    // "withCredentials": "include"
 }
 
 export default class api {
@@ -16,10 +16,10 @@ export default class api {
                 method: "GET",
                 mode: "cors",
                 headers: headers_main,
-                credentials: 'include',
-                xhrFields: {
-                    "withCredentials": 'true',
-                }
+                // credentials: 'include',
+                // xhrFields: {
+                //     "withCredentials": 'true',
+                // }
             })
             .catch(error => {
                 console.log(error);
@@ -32,10 +32,10 @@ export default class api {
                 method: "POST",
                 mode: "cors",
                 headers: headers_main,
-                credentials: 'include',
-                xhrFields: {
-                    "withCredentials": true,
-                },
+                // credentials: 'include',
+                // xhrFields: {
+                //     "withCredentials": true,
+                // },
                 body: JSON.stringify(data)
             })
             .catch(error => {
@@ -49,10 +49,10 @@ export default class api {
                 method: "PUT",
                 mode: "cors",
                 headers: headers_main,
-                credentials: 'include',
-                xhrFields: {
-                    "withCredentials": true,
-                },
+                // credentials: 'include',
+                // xhrFields: {
+                //     "withCredentials": true,
+                // },
                 body: JSON.stringify(data)
             })
             .catch(error => {
@@ -66,10 +66,10 @@ export default class api {
                 method: "DELETE",
                 mode: "cors",
                 headers: headers_main,
-                credentials: 'include',
-                xhrFields: {
-                    "withCredentials": true,
-                },
+                // credentials: 'include',
+                // xhrFields: {
+                //     "withCredentials": true,
+                // },
             })
             .catch(error => {
                 console.log(error);

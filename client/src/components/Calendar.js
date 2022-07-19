@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import AutoCompleteComponent from './AutoCompleteComponent';
 import '../assets/styles/Calendar.css'
 
-export default function Calendar({ calendarDays, setCalendarDays, dateRange, setDateRange, clearCheckedDates }) {
+export default function Calendar({ calendarDays, setCalendarDays, dateRange, setDateRange, clearCheckedDates, isMandatory }) {
     const months = [
         {
             id: 0,
@@ -183,7 +183,11 @@ export default function Calendar({ calendarDays, setCalendarDays, dateRange, set
                             : calendarDays.map((day, index) => <Grid item xs={1} id={index} key={index}>
                                 <Item
                                     id={index}
-                                    className={day.checked ? 'ItemChecked' : 'ItemUnchecked'}
+                                    className={
+                                        day.checked
+                                            ? `ItemChecked${isMandatory ? 'Mandatory' : 'Optional'}`
+                                            : 'ItemUnchecked'
+                                    }
                                     onClick={e => handleDateClick(e)}>
                                     {formatDay(day.date)}
                                 </Item>
