@@ -93,6 +93,35 @@ app.get('/daysForSelect', (req, res) => {
         res.json(ret)
     })
 })
+app.put('/nurses', (req, res) => {
+    var edit = req.body;
+
+    if (checkIfRequestEmpty(edit) || edit.length <= 0) {
+        res.status(400).send("Neispravno uneti podaci");
+    }
+
+    beginTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri unosu podataka u bazu");
+    };
+
+    edit.forEach((nurse) => {
+        connection.query(`UPDATE nurses SET Name = '${nurse.Name}', Surname = '${nurse.Surname}', Experienced = ${nurse.Experienced} WHERE NurseID = ${nurse.NurseID}`,
+            (err) => {
+                if (err) {
+                    rollBackTransaction;
+                    res.status(500).send("Greška pri čuvanju izmena u bazi");
+                }
+            });
+    });
+
+    commitTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri čuvanju izmena u bazi");
+    };
+
+    res.status(200).send("Uspešno sačuvano :)");
+})
 
 app.post('/nurses', (req, res) => {
     var nurses = req.body;
@@ -106,7 +135,34 @@ app.post('/nurses', (req, res) => {
             res.status(500).send("Greška pri unosu podataka u bazu");
     };
     nurses.forEach((nurse) => {
-        connection.query(`INSERT INTO nurses (name, surname, experienced) value("${nurse.Name}", "${nurse.Surname}", ${nurse.Experienced})`, (err) => {
+        connection.query(`INSERT INTO nurses (name, surname, experienced) value("${nurse.Name}", "${nurse.Surname}", ${nurse.Experienced})`,
+            (err) => {
+                if (err) {
+                    rollBackTransaction;
+                    res.status(500).send("Greška pri unosu podataka u bazu");
+                }
+            });
+    })
+    commitTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri unosu podataka u bazu");
+    };
+    res.status(200).send("Uspešno sačuvano :)")
+})
+
+app.delete('/nurses', (req, res) => {
+    var nurses = req.body;
+
+    if (checkIfRequestEmpty(nurses) || nurses.length <= 0) {
+        res.status(400).send("Neispravno uneti podaci");
+    }
+
+    beginTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri unosu podataka u bazu");
+    };
+    nurses.forEach((nurse) => {
+        connection.query(`DELETE FROM nurses WHERE NurseID = ${nurse})`, (err) => {
             if (err) {
                 rollBackTransaction;
                 res.status(500).send("Greška pri unosu podataka u bazu");
@@ -137,4 +193,6 @@ app.get('/nurses', (req, res) => {
         res.json(result)
     })
 })
+
+
 
