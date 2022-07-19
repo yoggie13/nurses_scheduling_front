@@ -122,8 +122,19 @@ app.post('/nurses', (req, res) => {
 
 app.get('/parameters', (req, res) => {
     connection.query("SELECT * FROM parameters", (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.status(500).send("Greška pri čitanju iz baze");
+        }
         res.json(result);
     });
+})
+
+app.get('/nurses', (req, res) => {
+    connection.query("SELECT * FROM nurses", (err, result, fields) => {
+        if (err) {
+            res.status(500).send("Greška pri čitanju iz baze");
+        }
+        res.json(result)
+    })
 })
 

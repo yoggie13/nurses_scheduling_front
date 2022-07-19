@@ -10,4 +10,7 @@ export default class services {
     static TryNewReport = async (name, data) => {
         return await api.POST("requests/" + name, data);
     }
+    static GetNurses = async () => {
+        return await api.GET("nurses/");
+    }
 }

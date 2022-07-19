@@ -9,6 +9,7 @@ import CreateReport from './components/CreateReport';
 import AllReports from './components/AllReports';
 import Header from './components/Header';
 import ReportContainer from "./components/ReportContainer";
+import Settings from "./components/Settings";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path='/izvestaji/:reportID' element={<ReportContainer />} />
           <Route path='/izvestaji' element={<AllReports />} />
+          <Route path='/podesavanja' element={<Settings />} />
           <Route path='/' element={<CreateReport />} />
         </Routes>
       </Router>
