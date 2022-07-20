@@ -19,4 +19,10 @@ export default class services {
     static EditNurses = async (data) => {
         return await api.PUT("nurses/", data);
     }
+    static GetParameters = async () => {
+        return await api.GET('parameters/');
+    }
+    static EditParameters = async (data) => {
+        return await api.PUT('parameters/', data);
+    }
 }

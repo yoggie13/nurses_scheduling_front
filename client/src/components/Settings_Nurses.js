@@ -40,7 +40,6 @@ export default function Settings_Nurses() {
         setNurses([...n]);
 
         addNurseForChange(index);
-
     }
     const handleSurnameChange = (e, index) => {
         var n = nurses;
@@ -138,8 +137,7 @@ export default function Settings_Nurses() {
         }
         setLoading(false)
     }
-    console.log(nursesToChange)
-    console.log(nursesToDelete)
+
     return (
         <>
             {

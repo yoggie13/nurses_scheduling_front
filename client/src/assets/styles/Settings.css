@@ -16,20 +16,30 @@
     border-radius: 8px;
     height: fit-content;
     margin-left: 10px;
+    margin-bottom: 50px;
 }
-.NurseSettings{
+.NurseSettings,
+.ParameterSettings{
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding: 16px 0px;
+    border-bottom: 1px solid lightgray;
 }
-.NurseArray {
+.ParameterName{
+    width: 500px;
+}
+.ParameterNumber{
+    max-width: 50px;
+}
+.NurseArray,
+.ParameterArray{
     display: flex;
     flex-direction: column;
 }
-.NurseArray .MyButton {
+.NurseArray .MyButton,
+.ParameterArray .MyButton{
     width: 200px;
     height: 50px;
     align-self: flex-end;
