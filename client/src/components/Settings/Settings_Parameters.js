@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import services from '../services/services';
-import Loading from './Loading';
+import services from '../../services/services';
+import Loading from '../Loading';
 
 export default function Settings_Parameters() {
     const [parameters, setParameters] = useState([]);
@@ -103,18 +103,20 @@ export default function Settings_Parameters() {
             {
                 loading
                     ? <Loading />
-                    : <div className='ParameterArray'>
+                    : <div className='SettingsArray'>
                         {
-                            parameters.map((param, index) => <div key={index} className='ParameterSettings'>
+                            parameters.map((param, index) => <div key={index} className='SettingsRow'>
                                 <TextField
                                     className='ParameterName'
                                     value={param.Name}
                                     onChange={(e) => handleNameChange(e, index)}
+                                    label='Naziv parametra'
                                 />
                                 <TextField
                                     className='ParameterNumber'
                                     value={param.Number}
                                     onChange={(e) => handleNumberChange(e, index)}
+                                    label='Vrednost parametra'
                                 />
                             </div>)
                         }

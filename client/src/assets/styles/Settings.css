@@ -18,8 +18,8 @@
     margin-left: 10px;
     margin-bottom: 50px;
 }
-.NurseSettings,
-.ParameterSettings{
+.SettingsRow
+{
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -33,13 +33,11 @@
 .ParameterNumber{
     max-width: 50px;
 }
-.NurseArray,
-.ParameterArray{
+.SettingsArray{
     display: flex;
     flex-direction: column;
 }
-.NurseArray .MyButton,
-.ParameterArray .MyButton{
+.SettingsArray .MyButton{    
     width: 200px;
     height: 50px;
     align-self: flex-end;

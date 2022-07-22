@@ -25,4 +25,10 @@ export default class services {
     static EditParameters = async (data) => {
         return await api.PUT('parameters/', data);
     }
+    static GetShifts = async (data) => {
+        return await api.GET('shifts/', data);
+    }
+    static EditShifts = async (data) => {
+        return await api.PUT('shifts/', data);
+    }
 }

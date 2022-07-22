@@ -224,5 +224,44 @@ app.put('/parameters', (req, res) => {
 })
 
 
+app.get('/shifts', (req, res) => {
+    connection.query("SELECT * FROM shifts", (err, result, fields) => {
+        if (err) {
+            res.status(500).send("Greška pri čitanju iz baze");
+        }
+        res.json(result);
+    });
+})
+app.put('/shifts', (req, res) => {
+    var edit = req.body;
+
+    if (checkIfRequestEmpty(edit) || edit.length <= 0) {
+        res.status(400).send("Neispravno uneti podaci");
+    }
+
+    beginTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri unosu podataka u bazu");
+    };
+
+    edit.forEach((shift) => {
+        connection.query(`UPDATE shifts SET Name = '${shift.Name}', Duration = ${shift.Duration}, StrongIntensity = ${shift.StrongIntensity}, Symbol = '${shift.Symbol}' WHERE ShiftID = ${shift.ShiftID}`,
+            (err) => {
+                if (err) {
+                    console.log(err);
+                    rollBackTransaction;
+                    res.status(500).send("Greška pri čuvanju izmena u bazi");
+                }
+            });
+    });
+
+    commitTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri čuvanju izmena u bazi");
+    };
+
+    res.status(200).send("Uspešno sačuvano :)");
+})
+
 
 

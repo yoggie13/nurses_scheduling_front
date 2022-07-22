@@ -9,7 +9,7 @@ import CreateReport from './components/CreateReport';
 import AllReports from './components/AllReports';
 import Header from './components/Header';
 import ReportContainer from "./components/ReportContainer";
-import Settings from "./components/Settings";
+import Settings from "./components/Settings/Settings";
 
 function App() {
   return (

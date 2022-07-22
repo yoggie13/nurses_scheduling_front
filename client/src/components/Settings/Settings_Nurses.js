@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Checkbox, FormControlLabel, FormGroup, TextField } from '@mui/material';
-import Loading from './Loading';
-import services from '../services/services';
+import Loading from '../Loading';
+import services from '../../services/services';
 import { DeleteForeverRounded } from '@mui/icons-material';
 
 export default function Settings_Nurses() {
@@ -143,15 +143,19 @@ export default function Settings_Nurses() {
             {
                 loading
                     ? <Loading />
-                    : <div className='NurseArray'>
+                    : <div className='SettingsArray'>
                         {
-                            nurses.map((nurse, index) => <div className='NurseSettings' key={nurse.NurseID}>
+                            nurses.map((nurse, index) => <div className='SettingsRow' key={nurse.NurseID}>
                                 <TextField
                                     value={nurse.Name}
-                                    onChange={(e) => handleNameChange(e, index)} />
+                                    onChange={(e) => handleNameChange(e, index)}
+                                    label='Ime'
+                                />
                                 <TextField
                                     value={nurse.Surname}
-                                    onChange={(e) => handleSurnameChange(e, index)} />
+                                    onChange={(e) => handleSurnameChange(e, index)}
+                                    label='Prezime'
+                                />
                                 <FormGroup>
                                     <FormControlLabel control={
                                         <Checkbox
