@@ -14,10 +14,13 @@ export default class services {
         return await api.GET("nurses/");
     }
     static DeleteNurses = async (data) => {
-        return await api.DELETE("nurses/", data);
+        return await api.PUT("nurses/delete", data);
     }
     static EditNurses = async (data) => {
         return await api.PUT("nurses/", data);
+    }
+    static AddNurse = async (data) => {
+        return await api.POST('nurses/', [data]);
     }
     static GetParameters = async () => {
         return await api.GET('parameters/');
@@ -31,4 +34,5 @@ export default class services {
     static EditShifts = async (data) => {
         return await api.PUT('shifts/', data);
     }
+
 }

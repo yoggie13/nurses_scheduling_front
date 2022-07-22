@@ -93,6 +93,31 @@ app.get('/daysForSelect', (req, res) => {
         res.json(ret)
     })
 })
+app.put('/nurses/delete', (req, res) => {
+    var nurses = req.body;
+
+    if (checkIfRequestEmpty(nurses) || nurses.length <= 0) {
+        res.status(400).send("Neispravno uneti podaci");
+    }
+
+    beginTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri unosu podataka u bazu");
+    };
+    nurses.forEach((nurse) => {
+        connection.query(`DELETE FROM nurses WHERE NurseID = ${nurse}`, (err) => {
+            if (err) {
+                rollBackTransaction;
+                res.status(500).send("Greška pri unosu podataka u bazu");
+            }
+        });
+    })
+    commitTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri unosu podataka u bazu");
+    };
+    res.status(200).send("Uspešno sačuvano :)")
+})
 
 app.get('/nurses', (req, res) => {
     connection.query("SELECT * FROM nurses", (err, result, fields) => {
@@ -159,31 +184,7 @@ app.post('/nurses', (req, res) => {
     res.status(200).send("Uspešno sačuvano :)")
 })
 
-app.delete('/nurses', (req, res) => {
-    var nurses = req.body;
 
-    if (checkIfRequestEmpty(nurses) || nurses.length <= 0) {
-        res.status(400).send("Neispravno uneti podaci");
-    }
-
-    beginTransaction(), (err) => {
-        if (err)
-            res.status(500).send("Greška pri unosu podataka u bazu");
-    };
-    nurses.forEach((nurse) => {
-        connection.query(`DELETE FROM nurses WHERE NurseID = ${nurse})`, (err) => {
-            if (err) {
-                rollBackTransaction;
-                res.status(500).send("Greška pri unosu podataka u bazu");
-            }
-        });
-    })
-    commitTransaction(), (err) => {
-        if (err)
-            res.status(500).send("Greška pri unosu podataka u bazu");
-    };
-    res.status(200).send("Uspešno sačuvano :)")
-})
 
 app.get('/parameters', (req, res) => {
     connection.query("SELECT * FROM parameters", (err, result, fields) => {

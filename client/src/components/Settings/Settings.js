@@ -22,9 +22,9 @@ export default function Settings() {
                     <tr>
                         <th onClick={(e) => handleRender(e, <Settings_Shifts />)}>Smene</th>
                     </tr>
-                    <tr>
+                    {/* <tr>
                         <th onClick={(e) => handleRender(e, <Settings_Rules />)}>Pravila</th>
-                    </tr>
+                    </tr> */}
                     <tr>
                         <th onClick={(e) => handleRender(e, <Settings_Parameters />)}>Parametri</th>
                     </tr>

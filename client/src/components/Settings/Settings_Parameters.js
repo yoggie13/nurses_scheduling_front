@@ -116,11 +116,14 @@ export default function Settings_Parameters() {
                                     className='ParameterNumber'
                                     value={param.Number}
                                     onChange={(e) => handleNumberChange(e, index)}
-                                    label='Vrednost parametra'
+                                    label='Vrednost'
                                 />
                             </div>)
                         }
-                        <button className='MyButton' onClick={(e) => handleSave(e)}>Sačuvaj izmene</button>
+                        <button className='MyButton' disabled={
+                            parametersToChange === undefined || parametersToChange === null || parametersToChange.length <= 0
+                        }
+                            onClick={(e) => handleSave(e)}>Sačuvaj izmene</button>
                     </div>
             }
         </>

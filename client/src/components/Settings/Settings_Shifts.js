@@ -80,6 +80,7 @@ export default function Settings_Shifts() {
             shiftsToChange !== null &&
             shiftsToChange.length > 0) {
 
+            debugger;
             var editData = [];
             for (let i = 0; i < shiftsToChange.length; i++) {
                 if (shifts[shiftsToChange[i]].Duration === undefined
@@ -155,7 +156,10 @@ export default function Settings_Shifts() {
                                 />
                             </div>)
                         }
-                        <button className='MyButton' onClick={(e) => handleSave(e)}>Sačuvaj izmene</button>
+                        <button className='MyButton' disabled={
+                            shiftsToChange === undefined || shiftsToChange === null || shiftsToChange.length <= 0
+                        }
+                            onClick={(e) => handleSave(e)}>Sačuvaj izmene</button>
                     </div>
             }
         </>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Checkbox, FormControlLabel, FormGroup, TextField } from '@mui/material';
+import { Checkbox, FormControlLabel, FormGroup, TextField, } from '@mui/material';
 import Loading from '../Loading';
 import services from '../../services/services';
 import { DeleteForeverRounded } from '@mui/icons-material';
+import Modal from '../Modal';
 
 export default function Settings_Nurses() {
     const [nurses, setNurses] = useState([]);
@@ -10,6 +11,18 @@ export default function Settings_Nurses() {
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState();
     const [nursesToDelete, setNursesToDelete] = useState([]);
+    const [modal, setModal] = useState();
+    const [newNurse, setNewNurse] = useState({
+        Name: "",
+        Surname: "",
+        Experienced: false
+    });
+
+    const isValid = (field) => {
+        if (field === undefined || field === null)
+            return false;
+        return true;
+    }
 
     useEffect(() => {
         setLoading(true);
@@ -127,15 +140,53 @@ export default function Settings_Nurses() {
                     succsess: true,
                     message: "Uspešno izbrisane sestre"
                 });
+                setLoading(false);
             }
             else {
                 setAlert({
                     succsess: false,
                     message: "Greška pri brisanju"
                 })
+                setLoading(false);
+            }
+        } else {
+            setLoading(false);
+        }
+    }
+    const addNurse = async () => {
+        setLoading(true);
+
+        if (!isValid(newNurse.Name) || !isValid(newNurse.Surname)) {
+            setAlert({
+                success: false,
+                message: "Polja nisu popunjena kako treba"
+            });
+            setLoading(false);
+            return;
+        } else {
+            var res = await services.AddNurse(newNurse);
+            if (res !== undefined && res.status === 200) {
+                setAlert({
+                    success: true,
+                    message: "Uspešno dodato"
+                });
+                setNewNurse({
+                    Name: "",
+                    Surname: "",
+                    Experienced: false
+                })
+                setModal(false);
+                getNurses();
+            }
+            else {
+                setAlert({
+                    success: false,
+                    message: "Greška pri čuvanju"
+                });
+                setLoading(false);
             }
         }
-        setLoading(false)
+
     }
 
     return (
@@ -169,12 +220,45 @@ export default function Settings_Nurses() {
                                 />
                             </div>)
                         }
-                        <button className='MyButton' disabled={
-                            (nursesToChange === undefined || nursesToChange === null || nursesToChange.length <= 0)
-                            && (nursesToDelete === undefined || nursesToDelete === null || nursesToDelete.length <= 0)
-                        }
-                            onClick={(e) => handleSave(e)}>Sačuvaj izmene</button>
+                        <div className='NursesFooter'>
+                            <button className='MyButton' onClick={(e) => setModal(true)}>Dodaj setru</button>
+                            <button className='MyButton' disabled={
+                                (nursesToChange === undefined || nursesToChange === null || nursesToChange.length <= 0)
+                                && (nursesToDelete === undefined || nursesToDelete === null || nursesToDelete.length <= 0)
+                            }
+                                onClick={(e) => handleSave(e)}>Sačuvaj izmene</button>
+                        </div>
                     </div>
+            }
+            {
+                modal
+                    ? <Modal
+                        content={
+                            <>
+                                <TextField
+                                    label="Ime"
+                                    value={newNurse.Name}
+                                    onChange={(e) => setNewNurse({ ...newNurse, Name: e.target.value })}
+                                />
+                                <TextField
+                                    label="Prezime"
+                                    value={newNurse.Surname}
+                                    onChange={(e) => setNewNurse({ ...newNurse, Surname: e.target.value })}
+                                />
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={<Checkbox
+                                            value={newNurse.Experienced}
+                                            onChange={(e) => setNewNurse({ ...newNurse, Experienced: e.target.checked })}
+                                        />}
+                                        label="Iskusna"
+                                    />
+                                </FormGroup>
+                                <button className="MyButton" onClick={(e) => addNurse()}>Sačuvaj</button>
+                            </>
+                        }
+                    />
+                    : null
             }
         </>
     )
