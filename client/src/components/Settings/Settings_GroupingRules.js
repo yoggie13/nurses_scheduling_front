@@ -155,6 +155,26 @@ export default function Settings_GroupingRules() {
             setLoading(false);
         }
     }
+    const handleDelete = async (id) => {
+        setLoading(true);
+        var res = await services.DeleteGroupingRule(id);
+
+        if (res !== undefined && res.status === 200) {
+            setAlert({
+                success: true,
+                message: "Uspešno obrisano"
+            });
+            getRules();
+            setLoading(false);
+        }
+        else {
+            setAlert({
+                success: false,
+                message: "Greška pri brisanju"
+            });
+            setLoading(false);
+        }
+    }
     return (
         <>
             {
@@ -182,6 +202,9 @@ export default function Settings_GroupingRules() {
                                     <ExpandCircleDownOutlined
                                         onClick={e => handleExpand(grule.GroupingRuleID)}
                                         id={ruleSelected === grule.GroupingRuleID ? 'up' : 'down'}
+                                    />
+                                    <DeleteForeverOutlined
+                                        onClick={e => handleDelete(grule.GroupingRuleID)}
                                     />
                                 </div>
                                 <div className='GroupingRuleNursesArray' id={ruleSelected === grule.GroupingRuleID ? 'show' : 'hidden'}>

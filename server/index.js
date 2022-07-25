@@ -319,8 +319,8 @@ app.get('/groupingrules', (req, res) => {
         }
     })
 })
-app.get('/groupingrules/:id/nurses', (req, res) => {
-    connection.query(`SELECT n.NurseID, n.Name, n.Surname from nurses_groupingrules ng JOIN nurses n on (ng.NurseID = n.NurseID) WHERE ng.GroupingRuleID = ${req.params.id}`, (err, result, fields) => {
+app.post('/groupingrules/:grid/nurses/:nid', (req, res) => {
+    connection.query(`INSERT INTO nurses_groupingrules values(${req.params.grid},${req.params.nid})`, (err, result, fields) => {
         if (err) {
             res.status(500).send("Greška pri čitanju podataka iz baze")
             return;
@@ -341,8 +341,8 @@ app.delete('/groupingrules/:grid/nurses/:nid', (req, res) => {
         }
     })
 })
-app.post('/groupingrules/:grid/nurses/:nid', (req, res) => {
-    connection.query(`INSERT INTO nurses_groupingrules values(${req.params.grid},${req.params.nid})`, (err, result, fields) => {
+app.get('/groupingrules/:id/nurses', (req, res) => {
+    connection.query(`SELECT n.NurseID, n.Name, n.Surname from nurses_groupingrules ng JOIN nurses n on (ng.NurseID = n.NurseID) WHERE ng.GroupingRuleID = ${req.params.id}`, (err, result, fields) => {
         if (err) {
             res.status(500).send("Greška pri čitanju podataka iz baze")
             return;
@@ -352,4 +352,16 @@ app.post('/groupingrules/:grid/nurses/:nid', (req, res) => {
         }
     })
 })
+app.delete('/groupingrules/:id', (req, res) => {
+    connection.query(`DELETE FROM groupingrules WHERE GroupingRuleID = ${req.params.id}`, (err, result, fields) => {
+        if (err) {
+            res.status(500).send("Greška pri brisanju")
+            return;
+        }
+        else {
+            res.send("Uspešno izbrisano");
+        }
+    })
+})
+
 

@@ -52,4 +52,10 @@ export default class services {
     static AddNurseToGroupingRule = async (GroupingRuleID, NurseID) => {
         return await api.POST(`groupingrules/${GroupingRuleID}/nurses/${NurseID}`);
     }
+    static DeleteGroupingRule = async (id) => {
+        return await api.DELETE('groupingrules/' + id)
+    }
+    static EditGroupingRules = async (data) => {
+        return await api.PUT('groupingrules/', data)
+    }
 }
