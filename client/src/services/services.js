@@ -34,5 +34,11 @@ export default class services {
     static EditShifts = async (data) => {
         return await api.PUT('shifts/', data);
     }
+    static GetSequenceRules = async () => {
+        return await api.GET('sequencerules/');
+    }
+    static DeleteSequenceRule = async (id) => {
+        return await api.DELETE('sequencerules/' + id)
+    }
 
 }

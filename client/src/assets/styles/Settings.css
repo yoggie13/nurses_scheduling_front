@@ -27,7 +27,8 @@
     padding: 16px 0px;
     border-bottom: 1px solid lightgray;
 }
-.ParameterName{
+.ParameterName,
+.RuleName{
     width: 500px;
 }
 .ParameterNumber{

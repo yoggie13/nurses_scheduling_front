@@ -184,8 +184,6 @@ app.post('/nurses', (req, res) => {
     res.status(200).send("Uspešno sačuvano :)")
 })
 
-
-
 app.get('/parameters', (req, res) => {
     connection.query("SELECT * FROM parameters", (err, result, fields) => {
         if (err) {
@@ -223,8 +221,6 @@ app.put('/parameters', (req, res) => {
 
     res.status(200).send("Uspešno sačuvano :)");
 })
-
-
 app.get('/shifts', (req, res) => {
     connection.query("SELECT * FROM shifts", (err, result, fields) => {
         if (err) {
@@ -262,6 +258,55 @@ app.put('/shifts', (req, res) => {
     };
 
     res.status(200).send("Uspešno sačuvano :)");
+})
+app.get('/sequencerules', (req, res) => {
+    connection.query("SELECT * FROM sequencerules", (err, result, fields) => {
+        if (err) {
+            res.status(500).send("Greška pri čitanju podatak iz baze")
+            return;
+        }
+        else {
+            res.json(result);
+        }
+        // else {
+        //     var ret = [];
+        //     result.forEach((item) => {
+        //         for (let i = 0; i < ret.length; i++) {
+        //             var added = false;
+        //             if (item.SequenceRuleID === ret[i].SequenceRuleID) {
+        //                 ret[i].Members.push({
+        //                     SequenceRuleMemberID: item.SequenceRuleMemberID,
+        //                     ShiftID: item.ShiftID
+        //                 })
+        //                 added = true;
+        //                 break;
+        //             }
+        //         }
+        //         if (!added) {
+        //             ret.push({
+        //                 SequenceRuleID: item.SequenceRuleID,
+        //                 Name: item.Name,
+        //                 Members: [{
+        //                     SequenceRuleMemberID: item.SequenceRuleMemberID,
+        //                     ShiftID: item.ShiftID
+        //                 }]
+        //             });
+        //         }
+        //     })
+        //     res.json(ret);
+        // }
+    })
+})
+app.delete('/sequencerules/:id', (req, res) => {
+    connection.query(`DELETE FROM sequencerules WHERE SequenceRuleID = ${req.params.id}`, (err, result, fields) => {
+        if (err) {
+            res.status(500).send("Greška pri brisanju")
+            return;
+        }
+        else {
+            res.send("Uspešno izbrisano");
+        }
+    })
 })
 
 
