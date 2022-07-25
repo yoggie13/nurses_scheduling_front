@@ -5,6 +5,7 @@ import services from '../../services/services';
 import AutoCompleteComponent from '../AutoCompleteComponent';
 import Loading from '../Loading';
 import Modal from '../Modal';
+import Notification from '../Notification';
 
 export default function Settings_GroupingRules() {
     const [rules, setRules] = useState([]);
@@ -116,12 +117,25 @@ export default function Settings_GroupingRules() {
             })
         }
     }
-    const handleAddNurse = async (grid) => {
+    const handleAddNurse = async () => {
         setLoading(true);
         getNurses();
         setModal(true);
     }
     const addNurseToRule = async () => {
+        setLoading(true);
+
+        for (let i = 0; i < nursesForRule.length; i++) {
+            if (nursesForRule[i].NurseID === nurse.id) {
+                setAlert({
+                    success: false,
+                    message: "Ta sestra je već dodata na to pravilo"
+                });
+                setLoading(false)
+                return;
+            }
+        }
+
         var res = await services.AddNurseToGroupingRule(ruleSelected, nurse.id);
 
         if (res !== undefined && res.status === 200) {
@@ -202,6 +216,15 @@ export default function Settings_GroupingRules() {
                                         </>
                                     }
                                     setModal={setModal}
+                                />
+                                : null
+                        }
+                        {
+                            alert !== undefined && alert !== null
+                                ? <Notification
+                                    success={alert.success}
+                                    message={alert.message}
+                                    setAlert={setAlert}
                                 />
                                 : null
                         }

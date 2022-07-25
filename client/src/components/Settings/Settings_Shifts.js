@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import services from '../../services/services';
 import Loading from '../Loading';
+import Notification from '../Notification';
 
 export default function Settings_Shifts() {
     const [shifts, setShifs] = useState([]);
@@ -161,6 +162,15 @@ export default function Settings_Shifts() {
                         }
                             onClick={(e) => handleSave(e)}>Sačuvaj izmene</button>
                     </div>
+            }
+            {
+                alert !== undefined && alert !== null
+                    ? <Notification
+                        success={alert.success}
+                        message={alert.message}
+                        setAlert={setAlert}
+                    />
+                    : null
             }
         </>
     )

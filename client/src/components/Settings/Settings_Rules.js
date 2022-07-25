@@ -3,6 +3,7 @@ import { TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import services from '../../services/services';
 import Loading from '../Loading';
+import Notification from '../Notification';
 
 export default function Settings_Rules() {
     const [loading, setLoading] = useState(false);
@@ -69,6 +70,15 @@ export default function Settings_Rules() {
                         </div>)
                     }
                     </div>
+            }
+            {
+                alert !== undefined && alert !== null
+                    ? <Notification
+                        success={alert.success}
+                        message={alert.message}
+                        setAlert={setAlert}
+                    />
+                    : null
             }
         </>
     )

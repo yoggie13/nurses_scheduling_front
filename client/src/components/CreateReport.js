@@ -56,14 +56,6 @@ export default function CreateReport() {
     }
 
     useEffect(() => {
-        if (alert !== undefined && alert !== null) {
-            setTimeout(() => {
-                setAlert(undefined)
-            }, 3000)
-        }
-    }, [alert])
-
-    useEffect(() => {
         setLoading(true)
         getNurses()
         getDays()
@@ -250,6 +242,7 @@ export default function CreateReport() {
                     ? <Notification
                         success={alert.success}
                         message={alert.message}
+                        setAlert={setAlert}
                     />
                     : null
             }

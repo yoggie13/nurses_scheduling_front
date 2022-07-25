@@ -2,6 +2,7 @@ import { TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import services from '../../services/services';
 import Loading from '../Loading';
+import Notification from '../Notification';
 
 export default function Settings_Parameters() {
     const [parameters, setParameters] = useState([]);
@@ -125,6 +126,15 @@ export default function Settings_Parameters() {
                         }
                             onClick={(e) => handleSave(e)}>Sačuvaj izmene</button>
                     </div>
+            }
+            {
+                alert !== undefined && alert !== null
+                    ? <Notification
+                        success={alert.success}
+                        message={alert.message}
+                        setAlert={setAlert}
+                    />
+                    : null
             }
         </>
     )

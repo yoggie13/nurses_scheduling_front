@@ -4,6 +4,7 @@ import Loading from '../Loading';
 import services from '../../services/services';
 import { DeleteForeverRounded } from '@mui/icons-material';
 import Modal from '../Modal';
+import Notification from '../Notification'
 
 export default function Settings_Nurses() {
     const [nurses, setNurses] = useState([]);
@@ -258,6 +259,15 @@ export default function Settings_Nurses() {
                             </>
                         }
                         setModal={setModal}
+                    />
+                    : null
+            }
+            {
+                alert !== undefined && alert !== null
+                    ? <Notification
+                        success={alert.success}
+                        message={alert.message}
+                        setAlert={setAlert}
                     />
                     : null
             }
