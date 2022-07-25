@@ -16,6 +16,7 @@ export default function Settings_GroupingRules() {
     const [modal, setModal] = useState(false);
     const [nurses, setNurses] = useState([]);
     const [nurse, setNurse] = useState();
+    const [rulesToChange, setRulesToChange] = useState([]);
 
     useEffect(() => {
         setLoading(true);
@@ -175,6 +176,86 @@ export default function Settings_GroupingRules() {
             setLoading(false);
         }
     }
+    const handleNameChange = (e, index) => {
+        var n = rules;
+        n[index].Name = e.target.value;
+
+        setRules([...n]);
+
+        addRulesToChange(index);
+    }
+    const handleDurationChange = (e, index) => {
+
+        if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value))
+            return;
+
+        var n = rules;
+        n[index].Duration = e.target.value;
+
+        setRules([...n]);
+
+        addRulesToChange(index);
+    }
+    const handleMaxChange = (e, index) => {
+
+        if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value))
+            return;
+
+        var n = rules;
+        n[index].Max = e.target.value;
+
+        setRules([...n]);
+
+        addRulesToChange(index);
+    }
+    const addRulesToChange = (index) => {
+        var n = rulesToChange;
+        for (let i = 0; i < n.length; i++) {
+            if (n[i] === index) {
+                return;
+            }
+        }
+        n.push(index)
+        setRulesToChange([...n]);
+    }
+    const handleSave = async (e) => {
+        setLoading(true);
+
+        if (rulesToChange !== undefined &&
+            rulesToChange !== null &&
+            rulesToChange.length > 0) {
+
+            var editData = [];
+            for (let i = 0; i < rulesToChange.length; i++) {
+                if (rules[rulesToChange[i]].Max === undefined
+                    || rules[rulesToChange[i]].Max === null
+                    || rules[rulesToChange[i]].Max === "") {
+                    setAlert({
+                        success: false,
+                        message: "Dozvoljen broj ne može biti prazan"
+                    })
+                    setLoading(false)
+                    return;
+                }
+                editData.push(rules[rulesToChange[i]])
+            }
+
+            var res = await services.EditGroupingRules(editData);
+            if (res !== undefined && res.status === 200) {
+                setAlert({
+                    succsess: true,
+                    message: "Uspešno sačuvane izmene"
+                });
+                setLoading(false);
+            }
+            else {
+                setAlert({
+                    succsess: false,
+                    message: "Greška pri čuvanju izmena"
+                })
+            }
+        }
+    }
     return (
         <>
             {
@@ -182,21 +263,24 @@ export default function Settings_GroupingRules() {
                     ? <Loading />
                     : <div className='SettingsArray'>
                         {
-                            rules.map((grule) => <div>
+                            rules.map((grule, index) => <div key={index}>
                                 <div className='SettingsRow'>
                                     <TextField
                                         className='RuleName'
                                         value={grule.Name}
+                                        onChange={e => handleNameChange(e, index)}
                                         label="Naziv"
                                     />
                                     <TextField
                                         className='RuleNumber'
                                         value={grule.Max}
+                                        onChange={e => handleMaxChange(e, index)}
                                         label="Dozvoljen broj"
                                     />
                                     <TextField
                                         className='RuleNumber'
                                         value={grule.Duration}
+                                        onChange={e => handleDurationChange(e, index)}
                                         label="U koliko dana"
                                     />
                                     <ExpandCircleDownOutlined
@@ -221,37 +305,43 @@ export default function Settings_GroupingRules() {
                                     <button className='MyButton'
                                         onClick={e => handleAddNurse(grule.GroupingRuleID)}>Dodaj sestru</button>
                                 </div>
+
                             </div>)
                         }
-                        {
-                            modal
-                                ? <Modal
-                                    content={
-                                        <>
-                                            <AutoCompleteComponent
-                                                id='nurse-select'
-                                                label="Sestra/Tehničar"
-                                                value={nurse}
-                                                setValue={setNurse}
-                                                menuItems={nurses}
-                                            />
-                                            <button className="MyButton" onClick={(e) => addNurseToRule()}>Sačuvaj</button>
-                                        </>
-                                    }
-                                    setModal={setModal}
-                                />
-                                : null
+
+                        <button className='MyButton' disabled={
+                            rulesToChange === undefined || rulesToChange === null || rulesToChange.length <= 0
                         }
-                        {
-                            alert !== undefined && alert !== null
-                                ? <Notification
-                                    success={alert.success}
-                                    message={alert.message}
-                                    setAlert={setAlert}
-                                />
-                                : null
-                        }
+                            onClick={(e) => handleSave(e)}>Sačuvaj izmene</button>
                     </div>
+            }
+            {
+                modal
+                    ? <Modal
+                        content={
+                            <>
+                                <AutoCompleteComponent
+                                    id='nurse-select'
+                                    label="Sestra/Tehničar"
+                                    value={nurse}
+                                    setValue={setNurse}
+                                    menuItems={nurses}
+                                />
+                                <button className="MyButton" onClick={(e) => addNurseToRule()}>Sačuvaj</button>
+                            </>
+                        }
+                        setModal={setModal}
+                    />
+                    : null
+            }
+            {
+                alert !== undefined && alert !== null
+                    ? <Notification
+                        success={alert.success}
+                        message={alert.message}
+                        setAlert={setAlert}
+                    />
+                    : null
             }
         </>
     )

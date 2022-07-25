@@ -363,5 +363,35 @@ app.delete('/groupingrules/:id', (req, res) => {
         }
     })
 })
+app.put('/groupingrules', (req, res) => {
+    var edit = req.body;
 
+    if (checkIfRequestEmpty(edit) || edit.length <= 0) {
+        res.status(400).send("Neispravno uneti podaci");
+    }
+
+    beginTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri unosu podataka u bazu");
+    };
+
+    edit.forEach((param) => {
+        if (param.Duration === "")
+            param.Duration = null
+        connection.query(`UPDATE groupingrules SET Name = '${param.Name}', Duration = ${param.Duration}, Max = ${param.Max} WHERE GroupingRuleID = ${param.GroupingRuleID}`,
+            (err) => {
+                if (err) {
+                    rollBackTransaction;
+                    res.status(500).send("Greška pri čuvanju izmena u bazi");
+                }
+            });
+    });
+
+    commitTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri čuvanju izmena u bazi");
+    };
+
+    res.status(200).send("Uspešno sačuvano :)");
+})
 
