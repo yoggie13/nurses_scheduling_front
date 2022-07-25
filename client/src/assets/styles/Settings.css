@@ -34,6 +34,9 @@
 .ParameterNumber{
     max-width: 80px;
 }
+.RuleNumber{
+    max-width: 120px;
+}
 .SettingsArray{
     display: flex;
     flex-direction: column;
@@ -47,4 +50,27 @@
 .NursesFooter {
     display: flex;
     justify-content: space-evenly;
+}
+.GroupingRuleNursesArray#hidden{
+    display: none;
+}
+.GroupingRuleNursesArray#show{
+    display: flex;
+    flex-direction: column;
+}
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root#up{
+    transform: rotate(180deg);
+}
+.GroupingRuleNurse{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.GroupingRuleNurse *{
+    width: 200px;
+    margin: 5px 0px 5px 0px;
+}
+.ModalBody .AutoCompleteComponent{
+    width: 300px;
 }

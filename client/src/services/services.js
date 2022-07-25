@@ -40,5 +40,16 @@ export default class services {
     static DeleteSequenceRule = async (id) => {
         return await api.DELETE('sequencerules/' + id)
     }
-
+    static GetGroupingRules = async () => {
+        return await api.GET('groupingrules/');
+    }
+    static GetNursesGroupingRules = async (id) => {
+        return await api.GET(`groupingrules/${id}/nurses`);
+    }
+    static DeleteNurseFromGroupingRule = async (GroupingRuleID, NurseID) => {
+        return await api.DELETE(`groupingrules/${GroupingRuleID}/nurses/${NurseID}`);
+    }
+    static AddNurseToGroupingRule = async (GroupingRuleID, NurseID) => {
+        return await api.POST(`groupingrules/${GroupingRuleID}/nurses/${NurseID}`);
+    }
 }

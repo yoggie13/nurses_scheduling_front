@@ -4,6 +4,7 @@ import Settings_Nurses from './Settings_Nurses'
 import Settings_Parameters from './Settings_Parameters'
 import Settings_Rules from './Settings_Rules'
 import Settings_Shifts from './Settings_Shifts'
+import Settings_GroupingRules from './Settings_GroupingRules'
 
 export default function Settings() {
     const [render, setRender] = useState(<Settings_Nurses />);
@@ -24,6 +25,9 @@ export default function Settings() {
                     </tr>
                     <tr>
                         <th onClick={(e) => handleRender(e, <Settings_Rules />)}>Pravila</th>
+                    </tr>
+                    <tr>
+                        <th onClick={(e) => handleRender(e, <Settings_GroupingRules />)}>Grupisanje</th>
                     </tr>
                     <tr>
                         <th onClick={(e) => handleRender(e, <Settings_Parameters />)}>Parametri</th>

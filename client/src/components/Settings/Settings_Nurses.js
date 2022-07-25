@@ -257,6 +257,7 @@ export default function Settings_Nurses() {
                                 <button className="MyButton" onClick={(e) => addNurse()}>Sačuvaj</button>
                             </>
                         }
+                        setModal={setModal}
                     />
                     : null
             }
