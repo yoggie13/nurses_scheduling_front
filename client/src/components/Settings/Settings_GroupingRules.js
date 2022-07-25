@@ -308,7 +308,6 @@ export default function Settings_GroupingRules() {
 
                             </div>)
                         }
-
                         <button className='MyButton' disabled={
                             rulesToChange === undefined || rulesToChange === null || rulesToChange.length <= 0
                         }

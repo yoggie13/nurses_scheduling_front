@@ -118,7 +118,6 @@ app.put('/nurses/delete', (req, res) => {
     };
     res.status(200).send("Uspešno sačuvano :)")
 })
-
 app.get('/nurses', (req, res) => {
     connection.query("SELECT * FROM nurses", (err, result, fields) => {
         if (err) {
@@ -156,7 +155,6 @@ app.put('/nurses', (req, res) => {
 
     res.status(200).send("Uspešno sačuvano :)");
 })
-
 app.post('/nurses', (req, res) => {
     var nurses = req.body;
 
@@ -183,7 +181,6 @@ app.post('/nurses', (req, res) => {
     };
     res.status(200).send("Uspešno sačuvano :)")
 })
-
 app.get('/parameters', (req, res) => {
     connection.query("SELECT * FROM parameters", (err, result, fields) => {
         if (err) {
@@ -259,6 +256,17 @@ app.put('/shifts', (req, res) => {
 
     res.status(200).send("Uspešno sačuvano :)");
 })
+app.delete('/sequencerules/:id', (req, res) => {
+    connection.query(`DELETE FROM sequencerules WHERE SequenceRuleID = ${req.params.id}`, (err, result, fields) => {
+        if (err) {
+            res.status(500).send("Greška pri brisanju")
+            return;
+        }
+        else {
+            res.send("Uspešno izbrisano");
+        }
+    })
+})
 app.get('/sequencerules', (req, res) => {
     connection.query("SELECT * FROM sequencerules", (err, result, fields) => {
         if (err) {
@@ -297,27 +305,34 @@ app.get('/sequencerules', (req, res) => {
         // }
     })
 })
-app.delete('/sequencerules/:id', (req, res) => {
-    connection.query(`DELETE FROM sequencerules WHERE SequenceRuleID = ${req.params.id}`, (err, result, fields) => {
-        if (err) {
-            res.status(500).send("Greška pri brisanju")
-            return;
-        }
-        else {
-            res.send("Uspešno izbrisano");
-        }
-    })
-})
-app.get('/groupingrules', (req, res) => {
-    connection.query("SELECT * FROM groupingrules", (err, result, fields) => {
-        if (err) {
-            res.status(500).send("Greška pri čitanju podatak iz baze")
-            return;
-        }
-        else {
-            res.json(result);
-        }
-    })
+app.put('/groupingrules', (req, res) => {
+    var edit = req.body;
+
+    if (checkIfRequestEmpty(edit) || edit.length <= 0) {
+        res.status(400).send("Neispravno uneti podaci");
+    }
+
+    beginTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri unosu podataka u bazu");
+    };
+
+    edit.forEach((param) => {
+        connection.query(`UPDATE sequencerules SET Name = '${param.Name}' WHERE SequenceRuleID = ${param.SequenceRuleID}`,
+            (err) => {
+                if (err) {
+                    rollBackTransaction;
+                    res.status(500).send("Greška pri čuvanju izmena u bazi");
+                }
+            });
+    });
+
+    commitTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri čuvanju izmena u bazi");
+    };
+
+    res.status(200).send("Uspešno sačuvano :)");
 })
 app.post('/groupingrules/:grid/nurses/:nid', (req, res) => {
     connection.query(`INSERT INTO nurses_groupingrules values(${req.params.grid},${req.params.nid})`, (err, result, fields) => {
@@ -360,6 +375,17 @@ app.delete('/groupingrules/:id', (req, res) => {
         }
         else {
             res.send("Uspešno izbrisano");
+        }
+    })
+})
+app.get('/groupingrules', (req, res) => {
+    connection.query("SELECT * FROM groupingrules", (err, result, fields) => {
+        if (err) {
+            res.status(500).send("Greška pri čitanju podatak iz baze")
+            return;
+        }
+        else {
+            res.json(result);
         }
     })
 })
