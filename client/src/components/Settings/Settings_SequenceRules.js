@@ -5,7 +5,7 @@ import services from '../../services/services';
 import Loading from '../Loading';
 import Notification from '../Notification';
 
-export default function Settings_Rules() {
+export default function Settings_SequenceRules() {
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState();
     const [rules, setRules] = useState([]);

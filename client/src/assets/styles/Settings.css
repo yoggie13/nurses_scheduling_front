@@ -74,3 +74,6 @@
 .ModalBody .AutoCompleteComponent{
     width: 300px;
 }
+.ChosenTh{
+    color: pink;
+}
