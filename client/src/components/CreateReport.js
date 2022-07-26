@@ -61,6 +61,11 @@ export default function CreateReport() {
         getDays()
     }, [])
 
+    useEffect(() => {
+        if (!allShifts)
+            setDay(undefined)
+    }, [allShifts])
+
     const getNurses = async () => {
         var res = await services.GetNursesForSelect();
 
@@ -170,10 +175,6 @@ export default function CreateReport() {
         setNursesAndDays([...n])
         setDefault();
     }
-    useEffect(() => {
-        if (!allShifts)
-            setDay(undefined)
-    }, [allShifts])
     const setDefault = () => {
         setNurse()
         setDay()
@@ -197,7 +198,9 @@ export default function CreateReport() {
                 Date_From: formatBack(nd.Date_From),
                 Date_Until: formatBack(nd.Date_Until),
                 NurseID: nd.NurseID,
-                Day_Type: nd.Day_Type
+                Day_Type: nd.Day_Type,
+                Shifts: nd.Shifts,
+                IsMandatory: nd.IsMandatory
             });
         })
 

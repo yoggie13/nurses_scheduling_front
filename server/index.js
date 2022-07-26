@@ -8,8 +8,6 @@ var corsOptions = {
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
-
-
 var connection = mysql.createConnection({
     host: "localhost",
     user: "yoggie13",
@@ -49,6 +47,29 @@ const rollBackTransaction = () => {
     connection.query("ROLLBACK TRANSACTION", (err) => {
         if (err) throw err;
     });
+}
+const addNonWorkingDays = (request, schid) => {
+    connection.query(`INSERT INTO nonworkingdays values(${schid},${request.NurseID},'${request.Date_From.slice(0, 10)}','${request.Date_Until.slice(0, 10)}',${request.Day_Type},${request.IsMandatory})`,
+        (err) => {
+            if (err) {
+                rollBackTransaction;
+                res.status(500).send("Greška pri čuvanju izmena u bazi");
+            }
+        });
+}
+const addNonWorkingShifts = (request, schid) => {
+    request.Shifts.forEach((shift, index) => {
+        if (shift) {
+            connection.query(`INSERT INTO nonworkingshifts values(${schid},${request.NurseID},'${request.Date_From.slice(0, 10)}','${request.Date_Until.slice(0, 10)}',${index + 1},${request.IsMandatory})`,
+                (err) => {
+                    if (err) {
+                        rollBackTransaction;
+                        res.status(500).send("Greška pri čuvanju izmena u bazi");
+                    }
+                });
+        }
+    })
+
 }
 
 app.use(
@@ -379,15 +400,16 @@ app.delete('/groupingrules/:id', (req, res) => {
     })
 })
 app.get('/groupingrules', (req, res) => {
-    connection.query("SELECT * FROM groupingrules", (err, result, fields) => {
-        if (err) {
-            res.status(500).send("Greška pri čitanju podatak iz baze")
-            return;
-        }
-        else {
-            res.json(result);
-        }
-    })
+    connection.query("SELECT * FROM groupingrules",
+        (err, result, fields) => {
+            if (err) {
+                res.status(500).send("Greška pri čitanju podatak iz baze")
+                return;
+            }
+            else {
+                res.json(result);
+            }
+        })
 })
 app.put('/groupingrules', (req, res) => {
     var edit = req.body;
@@ -420,4 +442,50 @@ app.put('/groupingrules', (req, res) => {
 
     res.status(200).send("Uspešno sačuvano :)");
 })
+
+app.post('/requests/:name', async (req, res) => {
+    var requests = req.body;
+
+    beginTransaction(), (err) => {
+        if (err)
+            res.status(500).send("Greška pri unosu podataka u bazu");
+    };
+
+    var schid = 0;
+
+    connection.query(`INSERT INTO schedules (GeneratedOn, Name) VALUES ('${new Date(Date.now()).toJSON().slice(0, 10)}', '${req.params.name}')`,
+        (err) => {
+            if (err) {
+                rollBackTransaction();
+                res.status(500).send("Greška pri unosu podataka u bazu");
+            }
+            else {
+                connection.query("SELECT last_insert_id() AS id",
+                    (err, result, fields) => {
+                        if (err) {
+                            rollBackTransaction();
+                            res.status(500).send("Greška pri unosu podataka u bazu");
+                        }
+                        else {
+                            schid = result[0].id;
+                            console.log(schid);
+
+                            requests.forEach((request) => {
+                                if (request.Shifts === "all")
+                                    addNonWorkingDays(request, schid);
+                                else
+                                    addNonWorkingShifts(request, schid);
+                            });
+
+                            commitTransaction(), (err) => {
+                                if (err)
+                                    res.status(500).send("Greška pri unosu podataka u bazu");
+                            };
+                            res.status(200).send("Uspešno sačuvano");
+                        }
+                    });
+            }
+        })
+
+});
 
