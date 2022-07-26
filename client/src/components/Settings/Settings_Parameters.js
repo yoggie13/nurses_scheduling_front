@@ -86,14 +86,14 @@ export default function Settings_Parameters() {
             var res = await services.EditParameters(editData);
             if (res !== undefined && res.status === 200) {
                 setAlert({
-                    succsess: true,
+                    success: true,
                     message: "Uspešno sačuvane izmene"
                 });
                 setLoading(false);
             }
             else {
                 setAlert({
-                    succsess: false,
+                    success: false,
                     message: "Greška pri čuvanju izmena"
                 })
             }

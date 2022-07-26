@@ -42,7 +42,7 @@ export default function Settings_Nurses() {
         }
         else {
             setAlert({
-                succsess: false,
+                success: false,
                 message: "Greška pri učitvanju"
             })
         }
@@ -119,13 +119,13 @@ export default function Settings_Nurses() {
             var res = await services.EditNurses(editData);
             if (res !== undefined && res.status === 200) {
                 setAlert({
-                    succsess: true,
+                    success: true,
                     message: "Uspešno sačuvane izmene"
                 });
             }
             else {
                 setAlert({
-                    succsess: false,
+                    success: false,
                     message: "Greška pri čuvanju izmena"
                 })
             }
@@ -138,14 +138,14 @@ export default function Settings_Nurses() {
             var ret = await services.DeleteNurses(nursesToDelete);
             if (ret !== undefined && ret.status === 200) {
                 setAlert({
-                    succsess: true,
+                    success: true,
                     message: "Uspešno izbrisane sestre"
                 });
                 setLoading(false);
             }
             else {
                 setAlert({
-                    succsess: false,
+                    success: false,
                     message: "Greška pri brisanju"
                 })
                 setLoading(false);

@@ -100,14 +100,14 @@ export default function Settings_Shifts() {
             var res = await services.EditShifts(editData);
             if (res !== undefined && res.status === 200) {
                 setAlert({
-                    succsess: true,
+                    success: true,
                     message: "Uspešno sačuvane izmene"
                 });
                 setLoading(false);
             }
             else {
                 setAlert({
-                    succsess: false,
+                    success: false,
                     message: "Greška pri čuvanju izmena"
                 })
             }
