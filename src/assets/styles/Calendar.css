@@ -14,7 +14,10 @@
     background-color: pink;
     cursor: pointer;
 }
-.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemChecked.css-1lzrhuq-MuiPaper-root{
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemCheckedOptional.css-1lzrhuq-MuiPaper-root{
+    background-color: yellow;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemCheckedMandatory.css-1lzrhuq-MuiPaper-root{
     background-color: pink;
 }
 .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemUnChecked.css-1lzrhuq-MuiPaper-root{

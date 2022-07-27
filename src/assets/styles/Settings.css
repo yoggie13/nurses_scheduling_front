@@ -1,0 +1,79 @@
+.Settings {
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+.SettingsMenu{
+    grid-column: 1;
+    height: 200px;
+}
+.SettingsMenu th:hover{
+    cursor: pointer;
+    color:pink;
+}
+.SettingsShow{
+    grid-column: 2;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    height: fit-content;
+    margin-left: 10px;
+    margin-bottom: 50px;
+}
+.SettingsRow
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 16px 0px;
+    border-bottom: 1px solid lightgray;
+}
+.ParameterName,
+.RuleName{
+    width: 500px;
+}
+.ParameterNumber{
+    max-width: 80px;
+}
+.RuleNumber{
+    max-width: 120px;
+}
+.SettingsArray{
+    display: flex;
+    flex-direction: column;
+}
+.SettingsArray .MyButton{    
+    width: 200px;
+    height: 50px;
+    align-self: flex-end;
+    margin-right: 50px;
+}
+.NursesFooter {
+    display: flex;
+    justify-content: space-evenly;
+}
+.GroupingRuleNursesArray#hidden{
+    display: none;
+}
+.GroupingRuleNursesArray#show{
+    display: flex;
+    flex-direction: column;
+}
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root#up{
+    transform: rotate(180deg);
+}
+.GroupingRuleNurse{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.GroupingRuleNurse *{
+    width: 200px;
+    margin: 5px 0px 5px 0px;
+}
+.ModalBody .AutoCompleteComponent{
+    width: 300px;
+}
+.ChosenTh{
+    color: pink;
+}
