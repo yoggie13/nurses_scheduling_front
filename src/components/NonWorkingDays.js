@@ -3,14 +3,16 @@ import React, { useEffect, useState } from 'react'
 import services from '../services/services';
 import AutoCompleteComponent from './AutoCompleteComponent'
 import Loading from './Loading';
+import Notification from './Notification';
 import ShiftPicker from './ShiftPicker'
 
-export default function NonWorkingDays({ nurse, setNurse, nurseArr, dateRange, setDateRange, nursesAndDays, setNursesAndDays, setAlert, clearCheckedDates, isMandatory, setIsMandatory }) {
+export default function NonWorkingDays({ nurse, setNurse, nurseArr, dateRange, setDateRange, nursesAndDays, setNursesAndDays, clearCheckedDates, isMandatory, setIsMandatory }) {
     const [day, setDay] = useState("");
     const [dayArr, setDayArr] = useState([]);
     const [allShifts, setAllShifts] = useState(true);
     const [shiftPick, setShiftPick] = useState([false, false, false]);
     const [loading, setLoading] = useState(true);
+    const [alert, setAlert] = useState();
 
     useEffect(() => {
         setLoading(true)
@@ -140,6 +142,14 @@ export default function NonWorkingDays({ nurse, setNurse, nurseArr, dateRange, s
                         }
                         <button className='MyButton' onClick={e => { handleSubmit(e) }}>Unesi</button>
                     </>
+            }
+            {
+                alert !== undefined && alert !== null
+                    ? <Notification
+                        success={alert.success}
+                        message={alert.message}
+                    />
+                    : null
             }
         </>
     )
