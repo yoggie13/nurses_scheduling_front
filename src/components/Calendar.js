@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import AutoCompleteComponent from './AutoCompleteComponent';
 import '../assets/styles/Calendar.css'
 
-export default function Calendar({ calendarDays, setCalendarDays, dateRange, setDateRange, clearCheckedDates, isMandatory }) {
+export default function Calendar({ calendarDays, setCalendarDays, chosenMonth, setChosenMonth, dateRange, setDateRange, clearCheckedDates, isMandatory }) {
     const months = [
         {
             id: 0,
@@ -59,7 +59,6 @@ export default function Calendar({ calendarDays, setCalendarDays, dateRange, set
             label: "Decembar"
         },
     ]
-    const [chosenMonth, setChosenMonth] = useState();
 
     const getDaysOfTheChosenMonth = () => {
         if (chosenMonth === undefined || chosenMonth === null) return [];
@@ -84,7 +83,7 @@ export default function Calendar({ calendarDays, setCalendarDays, dateRange, set
         while (date.getMonth() === chosenMonth.id) {
             days.push({
                 checked: false,
-                date: new Date(date).toLocaleDateString("sr-RS")
+                date: new Date(date).getDate()
             });
             date.setDate(date.getDate() + 1);
         }
@@ -101,7 +100,7 @@ export default function Calendar({ calendarDays, setCalendarDays, dateRange, set
     const formatDay = (date) => {
         if (date === "")
             return ""
-        return date.substr(0, date.indexOf('.'))
+        return date;
     }
     const handleDateClick = (e) => {
         e.preventDefault();
@@ -130,8 +129,8 @@ export default function Calendar({ calendarDays, setCalendarDays, dateRange, set
         }
         setCalendarDays([...d]);
         setDateRange({
-            date_from: `${minDate - firstReal}.${chosenMonth.id + 1}.${new Date(Date.now()).getFullYear()}`,
-            date_until: `${maxDate - firstReal}.${chosenMonth.id + 1}.${new Date(Date.now()).getFullYear()}`
+            date_from: minDate - firstReal,
+            date_until: maxDate - firstReal
         })
     }
 
