@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import '../assets/styles/CreateReport.css'
-import AutoCompleteComponent from './AutoCompleteComponent';
-import { FormControlLabel, FormGroup, TextField } from '@mui/material';
-import Switch from '@mui/material/Switch';
 import Calendar from './Calendar';
-import NursesAndDays from './NursesAndDays';
+import NonWorkingTable from './NonWorkingTable';
 import Notification from './Notification';
 import services from '../services/services';
 import Loading from './Loading';
-import ShiftPicker from './ShiftPicker';
+import NonWorkingDays from './NonWorkingDays';
+import MustWorkShifts from './MustWorkShifts';
+import SpecialNeedsShifts from './SpecialNeedsShifts';
+import MustWorkTable from './MustWorkTable';
+import SpecialNeedsShiftsTable from './SpecialNeedsShiftsTable';
+import { TextField } from '@mui/material';
 
 export default function CreateReport() {
     const [nurse, setNurse] = useState("");
@@ -22,23 +24,6 @@ export default function CreateReport() {
             label: "Milica Milicic"
         }
     ]);
-    const [day, setDay] = useState("");
-    const [dayArr, setDayArr] = useState(
-        [
-            {
-                id: 0,
-                label: "Godisnji odmor"
-            },
-            {
-                id: 1,
-                label: "Slobodan dan"
-            },
-            {
-                id: 2,
-                label: "Plaćeni slobodan dan"
-            }
-        ]
-    );
     const [dateRange, setDateRange] = useState();
     const [nursesAndDays, setNursesAndDays] = useState([])
     const [calendarDays, setCalendarDays] = useState();
@@ -46,8 +31,10 @@ export default function CreateReport() {
     const [loading, setLoading] = useState();
     const [name, setName] = useState();
     const [isMandatory, setIsMandatory] = useState(true);
-    const [allShifts, setAllShifts] = useState(true);
-    const [shiftPick, setShiftPick] = useState([false, false, false]);
+    const [mustWorkShifts, setMustWorkShifts] = useState([]);
+    const [specialNeedsShifts, setSpecialNeedsShifts] = useState([]);
+    const [inputChecked, setInputChecked] = useState(1);
+    const [chosenMonth, setChosenMonth] = useState();
 
     const isValid = (field) => {
         if (field === undefined || field === null)
@@ -58,13 +45,7 @@ export default function CreateReport() {
     useEffect(() => {
         setLoading(true)
         getNurses()
-        getDays()
     }, [])
-
-    useEffect(() => {
-        if (!allShifts)
-            setDay(undefined)
-    }, [allShifts])
 
     const getNurses = async () => {
         var res = await services.GetNursesForSelect();
@@ -91,30 +72,46 @@ export default function CreateReport() {
             })
         }
     }
-    const getDays = async () => {
-        var res = await services.GetDaysForSelect();
+    const handleMustWorkSubmit = async (shift) => {
+        var m = mustWorkShifts;
+        m.push({
+            NurseID: nurse.id,
+            NurseName: nurse.label,
+            DateFrom: dateRange.date_from,
+            DateUntil: dateRange.date_until,
+            ShiftID: parseInt(shift)
+        });
+        setMustWorkShifts([...m]);
 
-        if (res === undefined) {
-            setAlert({
-                success: false,
-                message: "Greška pri učitavanju"
-            })
-            return;
+        setNurse();
+        clearCheckedDates();
+    }
+    const handleSpecialNeedsShifts = async (shift, n) => {
+        var s = specialNeedsShifts;
+        for (let i = dateRange.date_from; i <= dateRange.date_until; i++) {
+            if (shift === "all") {
+                for (let j = 1; j <= 3; j++) {
+                    s.push({
+                        Day: i,
+                        ShiftID: j,
+                        NumberOfNurses: n
+                    })
+                }
+            } else {
+                for (let j = 0; j < shift.length; j++) {
+                    if (shift[j]) {
+                        s.push({
+                            Day: i,
+                            ShiftID: j + 1,
+                            NumberOfNurses: n
+                        })
+                    }
+                }
+            }
         }
 
-        if (res.status === 200) {
-            res.json()
-                .then((response) => {
-                    setDayArr(response);
-                    setLoading(false);
-                })
-        }
-        else {
-            setAlert({
-                success: false,
-                message: "Greška pri učitavanju"
-            })
-        }
+        setSpecialNeedsShifts([...s]);
+        clearCheckedDates();
     }
     const deleteNurseDay = (e) => {
         e.preventDefault();
@@ -145,66 +142,42 @@ export default function CreateReport() {
         setCalendarDays([...d]);
         setDateRange(undefined)
     }
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if ((!isValid(nurse)
-            || !isValid(dateRange))
-            || (allShifts && !isValid(day))
-            || (!allShifts && !shiftPick[0] && !shiftPick[1] && !shiftPick[2])) {
-            setAlert({
-                success: false,
-                message: "Nisu popunjeni svi podaci"
-            });
-            return;
-        }
-        var nurseDay = {
-            id: nursesAndDays.length,
-            NurseID: nurse.id,
-            Nurse_Name: nurse.label,
-            Date_From: dateRange.date_from,
-            Date_Until: dateRange.date_until,
-            Day_Type: day === undefined ? undefined : day.id,
-            Day_Type_Label: day === undefined ? undefined : day.label,
-            Shifts: allShifts ? 'all' : shiftPick,
-            IsMandatory: isMandatory
-        }
-
-        var n = nursesAndDays
-        n.push(nurseDay)
-        setNursesAndDays([...n])
-        setDefault();
-    }
-    const setDefault = () => {
-        setNurse()
-        setDay()
-        clearCheckedDates()
-        setShiftPick([false, false, false])
-        setIsMandatory(true)
-        setAllShifts(true)
-    }
-    const formatBack = (date) => {
-        var a = date.split(".")
-        var y = a.pop();
-        var m = a.pop();
-        var d = a.pop();
-
-        return new Date(new Date(Date.parse(`${m}/${d}/${y}`)).setHours(6)).toISOString();
-    }
     const formatForSending = () => {
-        var n = []
-        nursesAndDays.forEach((nd) => {
-            n.push({
-                Date_From: formatBack(nd.Date_From),
-                Date_Until: formatBack(nd.Date_Until),
-                NurseID: nd.NurseID,
-                Day_Type: nd.Day_Type,
-                Shifts: nd.Shifts,
-                IsMandatory: nd.IsMandatory
-            });
-        })
+        var data = [];
+        var daysData = [];
+        var shiftsData = [];
 
-        return n;
+        nursesAndDays.forEach((nd) => {
+            if (nd.Shifts === "all") {
+                daysData.push({
+                    DateFrom: nd.DateFrom,
+                    DateUntil: nd.DateUntil,
+                    NurseID: nd.NurseID,
+                    DayType: nd.DayType,
+                    IsMandatory: nd.IsMandatory
+                });
+            }
+            else {
+                shiftsData.push({
+                    DateFrom: nd.DateFrom,
+                    DateUntil: nd.DateUntil,
+                    NurseID: nd.NurseID,
+                    Shifts: nd.Shifts,
+                    IsMandatory: nd.IsMandatory
+                });
+            }
+        })
+        data = {
+            "schedule": {
+                Name: name,
+                Month: chosenMonth + 1
+            },
+            "days": daysData,
+            "shifts": shiftsData,
+            "mustWork": mustWorkShifts,
+            "specialNeeds": specialNeedsShifts
+        };
+        return data;
     }
     const handleSave = async (e) => {
 
@@ -254,51 +227,47 @@ export default function CreateReport() {
                     ? <Loading />
                     : <div className='CreateReport'>
                         <h1>Kreiranje rasporeda</h1>
+                        <div className='DataInputPickerWrapper'>
+                            <ul className='DataInputPicker'>
+                                <li id={1}
+                                    className={inputChecked === 1 ? "checked" : ""}
+                                    onClick={e => setInputChecked(1)}>Slobodni dani i odmori</li>
+                                <li id={2}
+                                    className={inputChecked === 2 ? "checked" : ""}
+                                    onClick={e => setInputChecked(2)}>Obavezne smene</li>
+                                <li id={3}
+                                    className={inputChecked === 3 ? "checked" : ""}
+                                    onClick={e => setInputChecked(3)}>Posebni zahtevi</li>
+                            </ul>
+                        </div>
                         <div className='DataInput'>
-                            <AutoCompleteComponent
-                                id='nurse-select'
-                                label="Sestra/Tehničar"
-                                value={nurse}
-                                setValue={setNurse}
-                                menuItems={nurseArr}
-                            />
-                            <AutoCompleteComponent
-                                id='day-select'
-                                label="Tip dana"
-                                value={day}
-                                setValue={setDay}
-                                menuItems={dayArr}
-                                readOnly={!allShifts}
-                            />
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={isMandatory}
-                                            onChange={(e) => setIsMandatory(e.target.checked)}
-                                        />
-                                    }
-                                    label="Obavezan" />
-                            </FormGroup>
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={allShifts}
-                                            onChange={(e) => setAllShifts(e.target.checked)}
-                                        />
-                                    }
-                                    label="Sve smene" />
-                            </FormGroup>
                             {
-                                !allShifts
-                                    ? <ShiftPicker
-                                        shiftPick={shiftPick}
-                                        setShiftPick={setShiftPick}
+                                inputChecked === 1
+                                    ? <NonWorkingDays
+                                        nurseArr={nurseArr}
+                                        nurse={nurse}
+                                        setNurse={setNurse}
+                                        dateRange={dateRange}
+                                        setDateRange={setDateRange}
+                                        nursesAndDays={nursesAndDays}
+                                        setNursesAndDays={setNursesAndDays}
+                                        clearCheckedDates={clearCheckedDates}
+                                        isMandatory={isMandatory}
+                                        setIsMandatory={setIsMandatory}
                                     />
-                                    : null
+                                    : inputChecked === 2
+                                        ? <MustWorkShifts
+                                            nurseArr={nurseArr}
+                                            nurse={nurse}
+                                            setNurse={setNurse}
+                                            handleMustWorkSubmit={handleMustWorkSubmit}
+                                        />
+                                        : inputChecked === 3
+                                            ? <SpecialNeedsShifts
+                                                handleSpecialNeedsShifts={handleSpecialNeedsShifts}
+                                            />
+                                            : null
                             }
-                            <button className='MyButton' onClick={e => { handleSubmit(e) }}>Unesi</button>
                         </div>
                         <Calendar
                             dateRange={dateRange}
@@ -307,11 +276,24 @@ export default function CreateReport() {
                             setCalendarDays={setCalendarDays}
                             clearCheckedDates={clearCheckedDates}
                             isMandatory={isMandatory}
+                            chosenMonth={chosenMonth}
+                            setChosenMonth={setChosenMonth}
                         />
-                        <NursesAndDays
-                            nursesAndDays={nursesAndDays}
-                            deleteNurseDay={deleteNurseDay}
-                        />
+                        <div className='Tables'>
+                            <h2>Kontrolne tabele</h2>
+                            <NonWorkingTable
+                                nursesAndDays={nursesAndDays}
+                                deleteNurseDay={deleteNurseDay}
+                            />
+                            <MustWorkTable
+                                mustWorkShifts={mustWorkShifts}
+                                setMustWorkShifts={setMustWorkShifts}
+                            />
+                            <SpecialNeedsShiftsTable
+                                specialNeedsShifts={specialNeedsShifts}
+                                setSpecialNeedsShifts={setSpecialNeedsShifts}
+                            />
+                        </div>
                         <div className='name-submit'>
                             <TextField id="standard-basic"
                                 label="Naziv izveštaja"

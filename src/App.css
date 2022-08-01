@@ -12,17 +12,57 @@ body{
   margin-right: 100px;
   margin-top: 20px;
 }
-h1{
+h1,
+h2,
+h3{
   grid-column: 1/3;
   text-align: left;
   font-family: 'Lato';
   font-weight: 700;
-  margin-bottom: 50px;
+}
+h1{
+  margin-bottom: 30px;
   font-size: 34px;
+}
+h2{
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+h3{
+  margin-bottom: 20px;
+  font-size: 18px;
 }
 p{
   font-family: 'Roboto';
   color: #282c34;
+}
+table{
+  padding: 10px 0px 10px 0px;
+  color: gray;
+  border-style: hidden; 
+  border-collapse: collapse;
+  box-shadow: 0 0 0 1px lightgray; /* this draws the table border  */ 
+  border-radius: 4px;
+}
+th,td{
+  border-left: 1px solid lightgray;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  height: 30px;
+}
+tr{
+  border: 1px solid lightgray;
+}
+table tr:last-child td:first-child{
+  border-bottom-left-radius: 4px;
+}
+table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+th,td{
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
 }
 .App-logo {
   height: 40vmin;

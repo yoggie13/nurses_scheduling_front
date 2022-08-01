@@ -8,7 +8,8 @@ export default class services {
         return await api.GET("daysForSelect/");
     }
     static TryNewReport = async (name, data) => {
-        return await api.POST("requests/" + name, data);
+        //return await api.POST("requests/" + name, data);
+        console.log(data)
     }
     static GetNurses = async () => {
         return await api.GET("nurses/");
