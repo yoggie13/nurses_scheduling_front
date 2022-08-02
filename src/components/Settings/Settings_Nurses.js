@@ -43,7 +43,7 @@ export default function Settings_Nurses() {
         else {
             setAlert({
                 success: false,
-                message: "Greška pri učitvanju"
+                message: "Greška pri učitavanju"
             })
         }
     }
