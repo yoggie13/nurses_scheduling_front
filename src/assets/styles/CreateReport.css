@@ -15,6 +15,7 @@
     margin: 0;
     padding: 0;
     margin-bottom: 30px;
+    padding-bottom: 1px;
     width: 100%;
     overflow-x: auto;
 }
@@ -24,7 +25,7 @@
 .DataInputPicker .checked {
     text-decoration-line: underline;
     text-decoration-color: pink;
-    text-decoration-thickness: 4px;
+    text-decoration-thickness: 3px;
 }
 
 .DataInputPicker li:hover {
