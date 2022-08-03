@@ -170,7 +170,7 @@ export default function CreateReport() {
         data = {
             "schedule": {
                 Name: name,
-                Month: chosenMonth + 1
+                Month: chosenMonth.id + 1
             },
             "days": daysData,
             "shifts": shiftsData,

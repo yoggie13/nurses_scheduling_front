@@ -20,7 +20,7 @@ export default function SpecialNeedsShiftsTable({ specialNeedsShifts, setSpecial
                 <tbody>
                     {
                         specialNeedsShifts.map((sns, index) => <tr key={index}>
-                            <td>{sns.Day}</td>
+                            <td>{sns.Day}.</td>
                             <td>{sns.ShiftID}</td>
                             <td>{sns.NumberOfNurses}</td>
                             <td><DeleteForeverRounded onClick={e => handleDelete(e, index)} /></td>
