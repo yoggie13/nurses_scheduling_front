@@ -1,4 +1,3 @@
-import { CheckBox } from '@mui/icons-material';
 import { Checkbox, FormControlLabel, FormGroup, TextField } from '@mui/material';
 import React, { useEffect } from 'react'
 import { useState } from 'react'
@@ -34,22 +33,7 @@ export default function Settings_Shifts() {
             })
         }
     }
-    const handleNameChange = (e, index) => {
-        var n = shifts;
-        n[index].Name = e.target.value;
 
-        setShifs([...n]);
-
-        addShiftsToChange(index);
-    }
-    const handleSymbolChange = (e, index) => {
-        var n = shifts;
-        n[index].Symbol = e.target.value;
-
-        setShifs([...n]);
-
-        addShiftsToChange(index);
-    }
     const addShiftsToChange = (index) => {
         var n = shiftsToChange;
         for (let i = 0; i < n.length; i++) {
@@ -60,20 +44,7 @@ export default function Settings_Shifts() {
         n.push(index)
         setShifsToChange([...n]);
     }
-    const handleNumberChange = (e, index) => {
 
-        if (e.target.value !== "" && (isNaN(parseFloat(e.target.value)) || /[a-zA-Z]/g.test(e.target.value)))
-            return;
-        // if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value))
-        //     return;
-
-        var n = shifts;
-        n[index].Duration = e.target.value;
-
-        setShifs([...n]);
-
-        addShiftsToChange(index);
-    }
     const handleSave = async (e) => {
         setLoading(true);
 
@@ -84,16 +55,6 @@ export default function Settings_Shifts() {
             debugger;
             var editData = [];
             for (let i = 0; i < shiftsToChange.length; i++) {
-                if (shifts[shiftsToChange[i]].Duration === undefined
-                    || shifts[shiftsToChange[i]].Duration === null
-                    || shifts[shiftsToChange[i]].Duration === "") {
-                    setAlert({
-                        success: false,
-                        message: "Parametar ne može biti prazan"
-                    })
-                    setLoading(false);
-                    return;
-                }
                 editData.push(shifts[shiftsToChange[i]])
             }
 
@@ -129,18 +90,7 @@ export default function Settings_Shifts() {
                     : <div className='SettingsArray'>
                         {
                             shifts.map((shift, index) => <div key={index} className='SettingsRow'>
-                                <TextField
-                                    className='ShiftName'
-                                    value={shift.Name}
-                                    onChange={(e) => handleNameChange(e, index)}
-                                    label='Naziv smene'
-                                />
-                                <TextField
-                                    className='ShiftDuration'
-                                    value={shift.Duration}
-                                    onChange={(e) => handleNumberChange(e, index)}
-                                    label='Trajanje smene'
-                                />
+                                <p>{shift.ShiftID}.</p>
                                 <FormGroup>
                                     <FormControlLabel control={
                                         <Checkbox
@@ -149,12 +99,6 @@ export default function Settings_Shifts() {
                                         />}
                                         label="Jak intenzitet" />
                                 </FormGroup>
-                                <TextField
-                                    className='ShiftSymbol'
-                                    value={shift.Symbol}
-                                    onChange={(e) => handleSymbolChange(e, index)}
-                                    label='Simbol smene'
-                                />
                             </div>)
                         }
                         <button className='MyButton' disabled={

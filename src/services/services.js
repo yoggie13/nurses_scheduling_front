@@ -62,4 +62,10 @@ export default class services {
     static EditSequenceRules = async (data) => {
         return await api.PUT('groupingrules/', data)
     }
+    static GetPatterns = async () => {
+        return await api.GET('patterns/')
+    }
+    static EditPatterns = async (data) => {
+        return await api.PUT('patterns/', data);
+    }
 }
