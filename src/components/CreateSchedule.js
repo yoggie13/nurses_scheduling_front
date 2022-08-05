@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import '../assets/styles/CreateReport.css'
+import '../assets/styles/CreateSchedule.css'
 import Calendar from './Calendar';
 import NonWorkingTable from './NonWorkingTable';
 import Notification from './Notification';
@@ -12,7 +12,7 @@ import MustWorkTable from './MustWorkTable';
 import SpecialNeedsShiftsTable from './SpecialNeedsShiftsTable';
 import { TextField } from '@mui/material';
 
-export default function CreateReport() {
+export default function CreateSchedule() {
     const [nurse, setNurse] = useState("");
     const [nurseArr, setNurseArr] = useState([
         {
@@ -189,7 +189,7 @@ export default function CreateReport() {
             return;
         }
 
-        var res = await services.TryNewReport(name, formatForSending());
+        var res = await services.TryNewSchedule(name, formatForSending());
 
         if (res === undefined) {
             setAlert({
@@ -225,7 +225,7 @@ export default function CreateReport() {
             {
                 loading
                     ? <Loading />
-                    : <div className='CreateReport'>
+                    : <div className='CreateSchedule'>
                         <h1>Kreiranje rasporeda</h1>
                         <div className='DataInputPickerWrapper'>
                             <ul className='DataInputPicker'>

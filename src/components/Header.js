@@ -13,8 +13,8 @@ export default function Header() {
                 <Link to='/'>
                     <li>Kreiranje rasporeda</li>
                 </Link>
-                <Link to='/izvestaji'>
-                    <li>Izveštaji</li>
+                <Link to='/rasporedi'>
+                    <li>Rasporedi</li>
                 </Link>
                 <Link to='podesavanja'>
                     <li><Settings /></li>

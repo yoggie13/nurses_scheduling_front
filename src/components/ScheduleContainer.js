@@ -1,12 +1,12 @@
 import React, { useRef, forwardRef, useCallback, useState } from 'react'
 import PrintIcon from '@mui/icons-material/Print';
-import '../assets/styles/Report.css'
-import Report from './Report';
+import '../assets/styles/Schedule.css'
+import Schedule from './Schedule';
 import { useReactToPrint } from 'react-to-print';
 
-export default function ReportContainer() {
+export default function ScheduleContainer() {
     const componentRef = useRef(null);
-    const [reportName, setReportName] = useState();
+    const [scheduleName, setScheduleName] = useState();
 
     const pageStyle = `
     @page {
@@ -15,20 +15,20 @@ export default function ReportContainer() {
     `
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
-        documentTitle: reportName,
+        documentTitle: scheduleName,
         pageStyle: pageStyle
     });
 
 
     const Wrapper = forwardRef((props, ref) => (
         <div ref={ref}>
-            <Report setReportName={setReportName} />
+            <Schedule setScheduleName={setScheduleName} />
         </div>
     ));
 
     return (
-        <div className='report-container-main'>
-            <div className='report-container'>
+        <div className='schedule-container-main'>
+            <div className='schedule-container'>
                 <Wrapper ref={componentRef}></Wrapper>
             </div>
             <p className='print-button' onClick={handlePrint}>Odštampaj<PrintIcon /></p>

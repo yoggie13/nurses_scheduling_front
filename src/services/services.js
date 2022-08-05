@@ -7,7 +7,7 @@ export default class services {
     static GetDaysForSelect = async () => {
         return await api.GET("daysForSelect/");
     }
-    static TryNewReport = async (name, data) => {
+    static TryNewSchedule = async (name, data) => {
         return await api.POST("requests/", data);
     }
     static GetNurses = async () => {
@@ -66,5 +66,11 @@ export default class services {
     }
     static EditPatterns = async (data) => {
         return await api.PUT('patterns/', data);
+    }
+    static GetSchedules = async () => {
+        return await api.GET('schedules/');
+    }
+    static GetSchedule = async (id) => {
+        return await api.GET(`schedules/${id}`);
     }
 }

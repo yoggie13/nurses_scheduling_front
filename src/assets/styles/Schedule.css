@@ -1,20 +1,20 @@
-.report-container-main{
+.schedule-container-main{
     display: flex;
     width: 100%;
     flex-direction: column;
 }
-.report-container-main .print-button{
+.schedule-container-main .print-button{
     align-self: flex-end;
 }
-.report-container{
+.schedule-container{
     overflow-x: auto;
     scroll-behavior: smooth;
 }
-.Report{
+.Schedule{
     padding: 0 1px 0 1px;
     min-width: 1200px;
 }
-.report-header{
+.schedule-header{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -39,7 +39,7 @@
 .print-button .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root:hover{
     color:white;
 }
-.ReportTable{
+.ScheduleTable{
     width: 100%;
 }
 th:first-child{
