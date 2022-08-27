@@ -73,4 +73,7 @@ export default class services {
     static GetSchedule = async (id) => {
         return await api.GET(`schedules/${id}`);
     }
+    static ChoseSchedule = async (id) => {
+        return await api.POST(`schedules/${id}`);
+    }
 }

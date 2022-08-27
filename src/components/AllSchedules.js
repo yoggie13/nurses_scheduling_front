@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import '../assets/styles/AllSchedules.css'
 import services from '../services/services';
 import Loading from './Loading';
@@ -35,7 +37,6 @@ export default function AllSchedules() {
             setLoading(false);
         }
     }
-
     return (
         <>
             {
@@ -54,12 +55,14 @@ export default function AllSchedules() {
                         <h1>Svi izveštaji</h1>
                         <table className='AllSchedulesTable'>
                             <thead>
-                                <th>Rb</th>
-                                <th>Naziv</th>
-                                <th>Datum generisanja</th>
-                                <th>Procenat ispunjenosti zahteva</th>
-                                <th>Odabran</th>
-                                <th>Link</th>
+                                <tr>
+                                    <th>Rb</th>
+                                    <th>Naziv</th>
+                                    <th>Datum generisanja</th>
+                                    <th>Procenat ispunjenosti zahteva</th>
+                                    <th>Odabran</th>
+                                    <th>Link</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 {
@@ -68,13 +71,14 @@ export default function AllSchedules() {
                                         <td>{schedule.Name}</td>
                                         <td>{schedule.GeneratedOn}</td>
                                         <td>{schedule.Percentage}</td>
-                                        <td>{schedule.Chosen}</td>
+                                        <td>{schedule.Chosen.data[0] === 1 ? <CheckCircleIcon sx={{ color: "#00FF00" }} /> : <CancelRoundedIcon sx={{ color: "red" }} />}</td>
                                         <td>
                                             <Link to={`/rasporedi/${schedule.ScheduleID}`}>
                                                 <ArrowForwardIosIcon />
                                             </Link>
                                         </td>
-                                    </tr>)
+                                    </tr>
+                                    )
                                 }
                             </tbody>
                         </table>

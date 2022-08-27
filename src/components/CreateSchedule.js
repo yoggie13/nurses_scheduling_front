@@ -36,6 +36,8 @@ export default function CreateSchedule() {
     const [inputChecked, setInputChecked] = useState(1);
     const [chosenMonth, setChosenMonth] = useState();
 
+    var fileDownload = require('js-file-download');
+
     const isValid = (field) => {
         if (field === undefined || field === null)
             return false;
@@ -180,36 +182,39 @@ export default function CreateSchedule() {
         return data;
     }
     const handleSave = async (e) => {
+        fileDownload(process.env.REACT_APP_CMD + "\n" +
+            "ampl nms/nms.run", "optimize.cmd");
 
-        if (!isValid(name)) {
-            setAlert({
-                success: false,
-                message: "Nije unet naziv"
-            })
-            return;
-        }
+        // if (!isValid(name)) {
+        //     setAlert({
+        //         success: false,
+        //         message: "Nije unet naziv"
+        //     })
+        //     return;
+        // }
 
-        var res = await services.TryNewSchedule(name, formatForSending());
+        // var res = await services.TryNewSchedule(name, formatForSending());
 
-        if (res === undefined) {
-            setAlert({
-                success: false,
-                message: "Nije uspelo"
-            })
-        }
+        // if (res === undefined) {
+        //     setAlert({
+        //         success: false,
+        //         message: "Nije uspelo"
+        //     })
+        // }
 
-        if (res.status === 200) {
-            setAlert({
-                success: true,
-                message: "Uspelo, uskoro izveštaj"
-            });
-        }
-        else {
-            setAlert({
-                success: false,
-                message: "Nije uspelo"
-            })
-        }
+        // if (res.status === 200) {
+        //     setAlert({
+        //         success: true,
+        //         message: "Uspelo, uskoro izveštaj"
+        //     });
+        //     fileDownload(CMD, "run.cmd");
+        // }
+        // else {
+        //     setAlert({
+        //         success: false,
+        //         message: "Nije uspelo"
+        //     })
+        // }
     }
     return (
         <>

@@ -12,11 +12,13 @@ export default function MustWorkTable({ nurses, mustWorkShifts, setMustWorkShift
             <h3>Smene kada sestre / tehničari moraju da rade</h3>
             <table className='MustWorkTable'>
                 <thead>
-                    <th>Sestra</th>
-                    <th>Datum od</th>
-                    <th>Datum do</th>
-                    <th>Smena</th>
-                    <th>Izbrisati</th>
+                    <tr>
+                        <th>Sestra</th>
+                        <th>Datum od</th>
+                        <th>Datum do</th>
+                        <th>Smena</th>
+                        <th>Izbrisati</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {

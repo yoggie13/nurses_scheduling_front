@@ -44,6 +44,7 @@ export default function Schedule({ setScheduleName }) {
         for (let i = 1; i <= schedule.NumberOfDays; i++) {
             header.push(<th key={i}>{i}</th>)
         }
+        header.push(<th>Br. sati</th>)
 
         return header;
     }
@@ -87,9 +88,35 @@ export default function Schedule({ setScheduleName }) {
                     }
                 }
             }
+            row.push(<td>{calculateNumberOfHours(nurDay.Days)}</td>)
             rows.push(<tr>{row}</tr>)
         })
         return rows;
+    }
+    const calculateNumberOfHours = (days) => {
+        var hours = 0;
+        days.forEach((day) => {
+            hours += day.Duration;
+        })
+        return hours;
+    }
+    const choseThisSchedule = async () => {
+        var res = await services.ChoseSchedule(schedule.ScheduleID);
+
+        if (res !== undefined && res.status === 200) {
+            var s = schedule;
+            s.Chosen.data = [1]
+            setSchedule(s);
+            setAlert({
+                success: true,
+                message: "Uspešno odabran"
+            })
+        } else {
+            setAlert({
+                success: false,
+                message: "Greška pri odabiru"
+            })
+        }
     }
     return (
         <>
@@ -108,6 +135,9 @@ export default function Schedule({ setScheduleName }) {
                     : <div className='Schedule'>
                         <div className='schedule-header'>
                             <h1>{schedule.Name}</h1>
+                            <button className='MyButton'
+                                disabled={schedule.Chosen.data[0] === 1}
+                                onClick={e => choseThisSchedule()}>Odaberi</button>
                         </div>
                         <table className='ScheduleTable'>
                             <thead>
