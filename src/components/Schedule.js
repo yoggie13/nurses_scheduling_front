@@ -52,10 +52,13 @@ export default function Schedule({ setScheduleName }) {
             <tr>
             <th rowSpan={2}>Sestra/Tehničar</th>
             {headerDays}
-            <th rowSpan={2}>Br. sati</th>
+            <th colSpan={3}>Br. sati</th>
             </tr>
             <tr>
             {headerNumbers}
+            <th>R</th>
+            <th>O</th>
+            <th>Uk.</th>
             </tr>
         </>
 
@@ -101,17 +104,21 @@ export default function Schedule({ setScheduleName }) {
                     }
                 }
             }
-            row.push(<td>{calculateNumberOfHours(nurDay.Days)}</td>)
+            row.push(<td style={{fontWeight: 'bold'}}>{calculateNumberOfHours(nurDay.Days)[0]}</td>)
+            row.push(<td style={{fontWeight: 'bold'}}>{calculateNumberOfHours(nurDay.Days)[1]}</td>)
+            row.push(<td style={{fontWeight: 'bold'}}>{calculateNumberOfHours(nurDay.Days)[2]}</td>)
             rows.push(<tr>{row}</tr>)
         })
         return rows;
     }
     const calculateNumberOfHours = (days) => {
-        var hours = 0;
+        var hoursWork = 0;
+        var hoursVac = 0;
         days.forEach((day) => {
-            hours += day.Duration;
+            if(day.Working) hoursWork += day.Duration;
+            else hoursVac += day.Duration;
         })
-        return hours;
+        return [hoursWork, hoursVac, hoursWork+hoursVac];
     }
     const choseThisSchedule = async () => {
         var res = await services.ChoseSchedule(schedule.ScheduleID);

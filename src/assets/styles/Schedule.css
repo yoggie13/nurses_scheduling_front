@@ -53,8 +53,8 @@
     width: 30px;
     max-width:30px;
 } */
-th{
-    width: 30px;
+th, td{
+    width: 32px;
 }
 .Signature{
     display: flex;
