@@ -1,17 +1,35 @@
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
 import React, { useState } from 'react'
 import AutoCompleteComponent from './AutoCompleteComponent'
+import Notification from './Notification';
 
-export default function MustWorkShifts({ nurse, setNurse, nurseArr, handleMustWorkSubmit }) {
-    const [shiftChecked, setShiftChecked] = useState();
+export default function MustWorkShifts({ nurse, setNurse, nurseArr, handleMustWorkSubmit, dateRange, clearCheckedDates }) {
+    const [shiftChecked, setShiftChecked] = useState(1);
+    const [alert, setAlert] = useState();
 
     const handleSubmit = async (e) => {
-        if (nurse !== undefined && nurse !== null && shiftChecked !== undefined && shiftChecked !== null) {
+        if (nurse !== undefined && 
+            nurse !== null && 
+            shiftChecked !== undefined && 
+            shiftChecked !== null &&
+            dateRange !== undefined &&
+            dateRange !== null) {
             await handleMustWorkSubmit(shiftChecked);
+            
+            setNurse()
+            clearCheckedDates()
+        }
+        else{
+            setAlert({
+                success: false,
+                message: "Niste uneli sve potrebne podatke"
+            })
         }
     }
     return (
         <>
+        {
+            <>
             <AutoCompleteComponent
                 id='nurse-select'
                 label="Sestra/Tehničar"
@@ -34,6 +52,17 @@ export default function MustWorkShifts({ nurse, setNurse, nurseArr, handleMustWo
                 </RadioGroup>
             </FormControl>
             <button className='MyButton' onClick={e => { handleSubmit(e) }}>Unesi</button>
+        </>
+        }
+        {
+                alert !== undefined && alert !== null
+                    ? <Notification
+                        success={alert.success}
+                        message={alert.message}
+                        setAlert={setAlert}
+                    />
+                    : null
+            }
         </>
     )
 }

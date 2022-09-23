@@ -260,11 +260,15 @@ export default function CreateSchedule() {
                                             nurseArr={nurseArr}
                                             nurse={nurse}
                                             setNurse={setNurse}
+                                            dateRange={dateRange}
                                             handleMustWorkSubmit={handleMustWorkSubmit}
+                                            clearCheckedDates={clearCheckedDates}
                                         />
                                         : inputChecked === 3
                                             ? <SpecialNeedsShifts
                                                 handleSpecialNeedsShifts={handleSpecialNeedsShifts}
+                                                dateRange={dateRange}
+                                                clearCheckedDates={clearCheckedDates}
                                             />
                                             : null
                             }
