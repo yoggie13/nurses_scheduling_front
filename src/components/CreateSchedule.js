@@ -36,8 +36,6 @@ export default function CreateSchedule() {
     const [inputChecked, setInputChecked] = useState(1);
     const [chosenMonth, setChosenMonth] = useState();
 
-    var fileDownload = require('js-file-download');
-
     const isValid = (field) => {
         if (field === undefined || field === null)
             return false;

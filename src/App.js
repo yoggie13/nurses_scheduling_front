@@ -3,7 +3,6 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import logo from './logo.svg';
 import './App.css';
 import CreateSchedule from './components/CreateSchedule';
 import Header from './components/Header';
