@@ -205,8 +205,6 @@ export default function CreateSchedule() {
                 success: true,
                 message: "Uspelo, uskoro izveštaj"
             });
-            fileDownload(process.env.REACT_APP_CMD + "\n" +
-                "ampl nms/nms.run", "optimize.cmd");
         }
         else {
             setAlert({
