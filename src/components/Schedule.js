@@ -10,6 +10,7 @@ export default function Schedule({ setScheduleName }) {
     const [schedule, setSchedule] = useState();
     const [loading, setLoading] = useState(true);
     const [alert, setAlert] = useState();
+    const weekdays = ["Ne","Po","Ut","Sr","Če","Pe","Su"];
 
     const location = useLocation().pathname;
     var loc = location.slice(location.lastIndexOf('/') + 1, location.length);
@@ -40,13 +41,25 @@ export default function Schedule({ setScheduleName }) {
     }
 
     const generateTableHeader = () => {
-        const header = [<th>Sestra/Tehničar</th>]
+        const headerNumbers = []
+        const headerDays = [];
         for (let i = 1; i <= schedule.NumberOfDays; i++) {
-            header.push(<th key={i}>{i}</th>)
+            headerDays.push(<th key={i}>{weekdays[new Date(schedule.Year, schedule.Month-1, i).getDay()]}</th>)
+            headerNumbers.push(<th key={i}>{i}</th>)
         }
-        header.push(<th>Br. sati</th>)
 
-        return header;
+        return (<>
+            <tr>
+            <th rowSpan={2}>Sestra/Tehničar</th>
+            {headerDays}
+            <th rowSpan={2}>Br. sati</th>
+            </tr>
+            <tr>
+            {headerNumbers}
+            </tr>
+        </>
+
+        );
     }
     const generateRows = () => {
         const rows = [];
@@ -141,9 +154,7 @@ export default function Schedule({ setScheduleName }) {
                         </div>
                         <table className='ScheduleTable'>
                             <thead>
-                                <tr>
                                     {generateTableHeader()}
-                                </tr>
                             </thead>
                             <tbody>
                                 {generateRows()}

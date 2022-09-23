@@ -46,12 +46,15 @@
 .ScheduleTable{
     width: 100%;
 }
-th:first-child{
+/* th:first-child{
     width:60px;
-}
-th:not(:first-child){
+} */
+/* th:not(:first-child){
     width: 30px;
     max-width:30px;
+} */
+th{
+    width: 30px;
 }
 .Signature{
     display: flex;
