@@ -67,6 +67,15 @@ export default class services {
     static EditPatterns = async (data) => {
         return await api.PUT('patterns/', data);
     }
+    static GetNWDTypes = async () => {
+        return await api.GET('nonworkingdaytypes/')
+    }
+    static EditNWDTypes = async(data) => {
+        return await api.POST('nonworkingdaytypes/', data)
+    }
+    static DeleteNWDTypes = async (id) => {
+        return await api.POST('nonworkingdaytypes/' + id)
+    }
     static GetSchedules = async () => {
         return await api.GET('schedules/');
     }
