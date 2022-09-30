@@ -1,3 +1,4 @@
+import { FileDownload } from "@mui/icons-material";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useLocation } from "react-router";
@@ -10,6 +11,8 @@ export default function Schedule({ setScheduleName }) {
   const [schedule, setSchedule] = useState();
   const [loading, setLoading] = useState(true);
   const [alert, setAlert] = useState();
+  const [headerState, setHeaderState] = useState([]);
+  const [rowsState, setRowsState] = useState([]);
   const weekdays = ["Ne", "Po", "Ut", "Sr", "Če", "Pe", "Su"];
 
   const location = useLocation().pathname;
@@ -19,6 +22,12 @@ export default function Schedule({ setScheduleName }) {
     setLoading(true);
     getSchedule();
   }, []);
+  useEffect(() => {
+    if (schedule !== undefined && schedule !== null) {
+      generateTableHeader();
+      generateRows();
+    }
+  }, [schedule]);
 
   const getSchedule = async () => {
     var res = await services.GetSchedule(parseInt(loc));
@@ -27,7 +36,6 @@ export default function Schedule({ setScheduleName }) {
       res.json().then((response) => {
         setSchedule(response);
         setLoading(false);
-        setScheduleName(schedule.Name);
       });
     } else {
       setAlert({
@@ -39,50 +47,34 @@ export default function Schedule({ setScheduleName }) {
   };
 
   const generateTableHeader = () => {
-    const headerNumbers = [];
-    const headerDays = [];
+    const headerNumbers = ["Sestre/Datumi"];
+    const headerDays = ["Dani u nedelji"];
     for (let i = 1; i <= schedule.NumberOfDays; i++) {
       headerDays.push(
-        <th key={i}>
-          {weekdays[new Date(schedule.Year, schedule.Month - 1, i).getDay()]}
-        </th>
+        weekdays[new Date(schedule.Year, schedule.Month - 1, i).getDay()]
       );
-      headerNumbers.push(<th key={i}>{i}</th>);
+      headerNumbers.push(i);
     }
 
-    return (
-      <>
-        <tr>
-          <th rowSpan={2}>Sestra/Tehničar</th>
-          {headerDays}
-          <th colSpan={3}>Br. sati</th>
-        </tr>
-        <tr>
-          {headerNumbers}
-          <th>R</th>
-          <th>O</th>
-          <th>Uk.</th>
-        </tr>
-      </>
-    );
+    headerDays.push("Br. sati");
+    headerNumbers.push("R", "O", "Uk.");
+    setHeaderState([...[headerDays, headerNumbers]]);
   };
   const generateRows = () => {
     const rows = [];
 
     schedule.NursesAndDays.forEach((nurDay) => {
       var row = [];
-      row.push(<th key={nurDay.NurseID}>{nurDay.NurseName}</th>);
+      row.push(nurDay.NurseName);
       let j = 1;
 
       for (let i = 0; i < nurDay.Days.length; i++) {
         if (nurDay.Days[i].Day === j) {
-          row.push(
-            <td style={{ "text-align": "center" }}>{nurDay.Days[i].Symbol}</td>
-          );
+          row.push(nurDay.Days[i].Symbol);
           j++;
           if (i === nurDay.Days.length - 1 && j <= schedule.NumberOfDays) {
             for (let k = j; k <= schedule.NumberOfDays; k++) {
-              row.push(<td></td>);
+              row.push("");
             }
           }
         } else {
@@ -90,45 +82,25 @@ export default function Schedule({ setScheduleName }) {
           if (i + 1 >= nurDay.Days.length) {
             for (k; k <= schedule.NumberOfDays; k++) {
               if (k === nurDay.Days[i].Day) {
-                row.push(
-                  <td style={{ "text-align": "center" }}>
-                    {nurDay.Days[i].Symbol}
-                  </td>
-                );
-              } else row.push(<td></td>);
+                row.push(nurDay.Days[i].Symbol);
+              } else row.push("");
             }
           } else {
             for (k; k < nurDay.Days[i + 1].Day; k++) {
               if (k === nurDay.Days[i].Day) {
-                row.push(
-                  <td style={{ "text-align": "center" }}>
-                    {nurDay.Days[i].Symbol}
-                  </td>
-                );
-              } else row.push(<td></td>);
+                row.push(nurDay.Days[i].Symbol);
+              } else row.push("");
             }
             j = k;
           }
         }
       }
-      row.push(
-        <td style={{ fontWeight: "bold" }}>
-          {calculateNumberOfHours(nurDay.Days)[0]}
-        </td>
-      );
-      row.push(
-        <td style={{ fontWeight: "bold" }}>
-          {calculateNumberOfHours(nurDay.Days)[1]}
-        </td>
-      );
-      row.push(
-        <td style={{ fontWeight: "bold" }}>
-          {calculateNumberOfHours(nurDay.Days)[2]}
-        </td>
-      );
-      rows.push(<tr>{row}</tr>);
+      row.push(calculateNumberOfHours(nurDay.Days)[0]);
+      row.push(calculateNumberOfHours(nurDay.Days)[1]);
+      row.push(calculateNumberOfHours(nurDay.Days)[2]);
+      rows.push(row);
     });
-    return rows;
+    setRowsState([...rows]);
   };
   const calculateNumberOfHours = (days) => {
     var hoursWork = 0;
@@ -157,6 +129,15 @@ export default function Schedule({ setScheduleName }) {
       });
     }
   };
+  const generateCSV = async () => {
+    let csvContent =
+      "data:text/csv;charset=unicode," +
+      headerState.map((h) => h.join(";")).join("\n") +
+      rowsState.map((r) => r.join(";")).join("\n");
+
+    var encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
+  };
   return (
     <>
       {alert !== undefined && alert !== null ? (
@@ -172,17 +153,38 @@ export default function Schedule({ setScheduleName }) {
         <div className="Schedule">
           <div className="schedule-header">
             <h1>{schedule.Name}</h1>
-            <button
-              className="MyButton"
-              disabled={schedule.Chosen === 1}
-              onClick={(e) => choseThisSchedule()}
-            >
-              Odaberi
-            </button>
+            <div className="Buttons">
+              <button className="MyButton" onClick={(e) => generateCSV()}>
+                Eksportuj
+              </button>
+              <button
+                className="MyButton"
+                disabled={schedule.Chosen === 1}
+                onClick={(e) => choseThisSchedule()}
+              >
+                Odaberi
+              </button>
+            </div>
           </div>
           <table className="ScheduleTable">
-            <thead>{generateTableHeader()}</thead>
-            <tbody>{generateRows()}</tbody>
+            <thead>
+              {headerState.map((headerRow) => (
+                <tr>
+                  {headerRow.map((hrEl) => (
+                    <th>{hrEl}</th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {rowsState.map((row) => (
+                <tr>
+                  {row.map((rowEl) => (
+                    <td>{rowEl}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
           </table>
           <div className="Signature">
             <div className="alignLeft">
@@ -191,7 +193,7 @@ export default function Schedule({ setScheduleName }) {
             </div>
             <div className="alignRight">
               <p>_______________________</p>
-              <p style={{ "text-align": "center" }}>Ružica Nikolić</p>
+              <p style={{ textAlign: "center" }}>Ružica Nikolić</p>
             </div>
           </div>
         </div>
