@@ -54,7 +54,6 @@ export default function AllSchedules() {
                 <th>Rb</th>
                 <th>Naziv</th>
                 <th>Datum generisanja</th>
-                <th>Procenat ispunjenosti zahteva</th>
                 <th>Odabran</th>
                 <th>Link</th>
               </tr>
@@ -67,7 +66,6 @@ export default function AllSchedules() {
                   <td>
                     {new Date(schedule.GeneratedOn).toLocaleDateString("sr-RS")}
                   </td>
-                  <td>{schedule.Percentage}</td>
                   <td>
                     {schedule.Chosen === 1 ? (
                       <CheckCircleIcon sx={{ color: "#00FF00" }} />
