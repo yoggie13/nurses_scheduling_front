@@ -138,7 +138,7 @@ export default function Calendar({
   };
 
   useEffect(() => {
-    setChosenMonth(months[new Date(Date.now()).getMonth()]);
+    setChosenMonth(months[new Date(Date.now()).getMonth() + 1]);
   }, []);
 
   useEffect(() => {

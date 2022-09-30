@@ -14,16 +14,7 @@ import { TextField } from "@mui/material";
 
 export default function CreateSchedule() {
   const [nurse, setNurse] = useState("");
-  const [nurseArr, setNurseArr] = useState([
-    {
-      id: 0,
-      label: "Marina Marinic",
-    },
-    {
-      id: 1,
-      label: "Milica Milicic",
-    },
-  ]);
+  const [nurseArr, setNurseArr] = useState([]);
   const [dateRange, setDateRange] = useState();
   const [nursesAndDays, setNursesAndDays] = useState([]);
   const [calendarDays, setCalendarDays] = useState();
