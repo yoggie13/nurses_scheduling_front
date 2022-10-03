@@ -99,6 +99,7 @@ th, td{
 .schedule-text{
     text-align: left;
     font-weight: bold;
+    margin-top: 0px;
 }
   @media print{
     body{
