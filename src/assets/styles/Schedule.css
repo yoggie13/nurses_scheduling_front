@@ -96,6 +96,10 @@ th, td{
     align-items: center;
     justify-content: space-between;
 }
+.schedule-text{
+    text-align: left;
+    font-weight: bold;
+}
   @media print{
     body{
         zoom: 0.55;

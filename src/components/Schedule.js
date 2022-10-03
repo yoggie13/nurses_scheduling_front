@@ -166,6 +166,7 @@ export default function Schedule({ setScheduleName }) {
               </button>
             </div>
           </div>
+          <p className="schedule-text">{`MESEČNI RASPORED RADA RADNIKA RADNE JEDINICE NEONATOLOGIJA - SESTRE OD 1. DO ${schedule.NumberOfDays}.${schedule.Month}.${schedule.Year}. GODINE`}</p>
           <table className="ScheduleTable">
             <thead>
               {headerState.map((headerRow) => (
