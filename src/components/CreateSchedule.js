@@ -37,36 +37,33 @@ export default function CreateSchedule() {
     getNurses();
   }, []);
 
-  const checkOverlap = (nurse, dateFrom, dateUntil, parentArray) => {
-    if (parentArray === "mws") {
-      for (let i = 0; i < nursesAndDays.length; i++) {
-        var n = nursesAndDays[i];
-        if (n.NurseID === nurse) {
-          if (
-            dateFrom === n.DateFrom ||
-            dateFrom === n.DateUntil ||
-            dateUntil === n.DateFrom ||
-            dateUntil === n.DateUntil
-          )
-            return true;
-          if (dateFrom < n.DateFrom && dateUntil > n.DateFrom) return true;
-          if (dateFrom > n.DateFrom && dateFrom < n.DateUntil) return true;
-        }
+  const checkOverlap = (nurse, dateFrom, dateUntil) => {
+    for (let i = 0; i < nursesAndDays.length; i++) {
+      var n = nursesAndDays[i];
+      if (n.NurseID === nurse) {
+        if (
+          dateFrom === n.DateFrom ||
+          dateFrom === n.DateUntil ||
+          dateUntil === n.DateFrom ||
+          dateUntil === n.DateUntil
+        )
+          return true;
+        if (dateFrom < n.DateFrom && dateUntil > n.DateFrom) return true;
+        if (dateFrom > n.DateFrom && dateFrom < n.DateUntil) return true;
       }
-    } else if (parentArray === "nwd") {
-      for (let i = 0; i < mustWorkShifts.length; i++) {
-        var n = mustWorkShifts[i];
-        if (n.NurseID === nurse) {
-          if (
-            dateFrom === n.DateFrom ||
-            dateFrom === n.DateUntil ||
-            dateUntil === n.DateFrom ||
-            dateUntil === n.DateUntil
-          )
-            return true;
-          if (dateFrom < n.DateFrom && dateUntil > n.DateFrom) return true;
-          if (dateFrom > n.DateFrom && dateFrom < n.DateUntil) return true;
-        }
+    }
+    for (let i = 0; i < mustWorkShifts.length; i++) {
+      var n = mustWorkShifts[i];
+      if (n.NurseID === nurse) {
+        if (
+          dateFrom === n.DateFrom ||
+          dateFrom === n.DateUntil ||
+          dateUntil === n.DateFrom ||
+          dateUntil === n.DateUntil
+        )
+          return true;
+        if (dateFrom < n.DateFrom && dateUntil > n.DateFrom) return true;
+        if (dateFrom > n.DateFrom && dateFrom < n.DateUntil) return true;
       }
     }
     return false;

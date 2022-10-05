@@ -30,14 +30,7 @@ export default function MustWorkShifts({
       dateRange !== undefined &&
       dateRange !== null
     ) {
-      if (
-        !checkOverlap(
-          nurse.id,
-          dateRange.date_from,
-          dateRange.date_until,
-          "mws"
-        )
-      ) {
+      if (!checkOverlap(nurse.id, dateRange.date_from, dateRange.date_until)) {
         await handleMustWorkSubmit(shiftChecked);
 
         setNurse();
@@ -45,7 +38,7 @@ export default function MustWorkShifts({
       } else {
         setAlert({
           success: false,
-          message: "Već ste za tu sestru uneli te dane neradne",
+          message: "Već ste za tu sestru uneli te dane",
         });
       }
     } else {

@@ -86,9 +86,7 @@ export default function NonWorkingDays({
       return;
     }
 
-    if (
-      !checkOverlap(nurse.id, dateRange.date_from, dateRange.date_until, "nwd")
-    ) {
+    if (!checkOverlap(nurse.id, dateRange.date_from, dateRange.date_until)) {
       var nurseDay = {
         id: nursesAndDays.length,
         NurseID: nurse.id,
@@ -108,7 +106,7 @@ export default function NonWorkingDays({
     } else {
       setAlert({
         success: false,
-        message: "Već ste za tu sestru uneli te dane kao obavezne",
+        message: "Već ste za tu sestru uneli te dane",
       });
     }
   };
