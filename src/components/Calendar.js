@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AutoCompleteComponent from "./AutoCompleteComponent";
@@ -9,6 +9,8 @@ export default function Calendar({
   setCalendarDays,
   chosenMonth,
   setChosenMonth,
+  year,
+  setYear,
   dateRange,
   setDateRange,
   clearCheckedDates,
@@ -64,10 +66,14 @@ export default function Calendar({
       label: "Decembar",
     },
   ];
+  const [yearsToChoose, setYearsToChoose] = useState({
+    id: 1,
+    label: "2022",
+  });
 
   const getDaysOfTheChosenMonth = () => {
     if (chosenMonth === undefined || chosenMonth === null) return [];
-    var date = new Date(new Date(Date.now()).getFullYear(), chosenMonth.id, 1);
+    var date = new Date(year.label, chosenMonth.id, 1);
     var days = [];
     if (date.getDay() === 0) {
       for (let i = 7; i > 1; i--) {
@@ -138,22 +144,54 @@ export default function Calendar({
   };
 
   useEffect(() => {
+    var y = new Date(Date.now()).getFullYear();
+    setYearsToChoose([
+      {
+        id: 0,
+        label: `${y - 1}`,
+      },
+      {
+        id: 1,
+        label: `${y}`,
+      },
+      {
+        id: 2,
+        label: `${y + 1}`,
+      },
+      {
+        id: 3,
+        label: `${y + 2}`,
+      },
+    ]);
     setChosenMonth(months[new Date(Date.now()).getMonth() + 1]);
+    setYear({
+      id: 1,
+      label: `${y}`,
+    });
   }, []);
 
   useEffect(() => {
     setCalendarDays(getDaysOfTheChosenMonth());
-  }, [chosenMonth]);
+  }, [chosenMonth, year]);
 
   return (
     <div className="Calendar">
-      <AutoCompleteComponent
-        id="month-select"
-        label="Mesec"
-        value={chosenMonth}
-        setValue={setChosenMonth}
-        menuItems={months}
-      />
+      <div className="CalendarMonthAndYear">
+        <AutoCompleteComponent
+          id="month-select"
+          label="Mesec"
+          value={chosenMonth}
+          setValue={setChosenMonth}
+          menuItems={months}
+        />
+        <AutoCompleteComponent
+          id="year-select"
+          label="Godina"
+          value={year}
+          setValue={setYear}
+          menuItems={yearsToChoose}
+        />
+      </div>
       <Box sx={{ flexGrow: 1 }}>
         <Grid id="calendar-header" container spacing={2} columns={7}>
           <Grid item xs={1}>

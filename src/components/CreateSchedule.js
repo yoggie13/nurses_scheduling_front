@@ -26,6 +26,7 @@ export default function CreateSchedule() {
   const [specialNeedsShifts, setSpecialNeedsShifts] = useState([]);
   const [inputChecked, setInputChecked] = useState(1);
   const [chosenMonth, setChosenMonth] = useState();
+  const [year, setYear] = useState();
 
   const isValid = (field) => {
     if (field === undefined || field === null) return false;
@@ -187,6 +188,7 @@ export default function CreateSchedule() {
     data = {
       schedule: {
         Name: name,
+        Year: parseInt(year.label),
         Month: chosenMonth.id + 1,
       },
       days: daysData,
@@ -307,6 +309,8 @@ export default function CreateSchedule() {
             isMandatory={isMandatory}
             chosenMonth={chosenMonth}
             setChosenMonth={setChosenMonth}
+            year={year}
+            setYear={setYear}
           />
           <div className="Tables">
             <h2>Kontrolne tabele</h2>
