@@ -13,8 +13,8 @@ export default class services {
   static GetNurses = async () => {
     return await api.GET("nurses/");
   };
-  static DeleteNurses = async (data) => {
-    return await api.PUT("nurses/delete", data);
+  static DeleteNurses = async (id) => {
+    return await api.PUT(`nurses/${id}/delete`);
   };
   static EditNurses = async (data) => {
     return await api.PUT("nurses/", data);

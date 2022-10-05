@@ -16,7 +16,7 @@ export default function Settings_Nurses() {
   const [nursesToChange, setNursesToChange] = useState([]);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState();
-  const [nursesToDelete, setNursesToDelete] = useState([]);
+  const [nursesToDelete, setNursesToDelete] = useState();
   const [modal, setModal] = useState();
   const [newNurse, setNewNurse] = useState({
     Name: "",
@@ -24,6 +24,7 @@ export default function Settings_Nurses() {
     Experienced: false,
     Main: false,
   });
+  const [deleteModal, setDeleteModal] = useState();
 
   const isValid = (field) => {
     if (field === undefined || field === null) return false;
@@ -100,25 +101,31 @@ export default function Settings_Nurses() {
     n.push(index);
     setNursesToChange([...n]);
   };
-  const handleDelete = (e, index) => {
-    e.preventDefault();
+  const handleCallDelete = (e, index) => {
+    setNursesToDelete(nurses[index].NurseID);
+    console.log(nurses[index].NurseID);
+    setDeleteModal(true);
+  };
+  const handleDelete = async () => {
+    setLoading(true);
+    var res = await services.DeleteNurses(nursesToDelete);
 
-    var d = nursesToDelete;
-    d.push(nurses[index].NurseID);
-    setNursesToDelete([...d]);
-
-    var n = nurses;
-    n.splice(index, 1);
-    setNurses([...n]);
-
-    var ntc = nursesToChange;
-
-    for (let i = 0; i < ntc.length; i++) {
-      if (ntc[i] === index) ntc.splice(i, 1);
-      if (ntc[i] > index) ntc[i]--;
+    if (res !== undefined && res.status === 200) {
+      setAlert({
+        success: true,
+        message: "Uspešno obrisana sestra",
+      });
+      await getNurses();
+      setLoading(false);
+      setDeleteModal(false);
+    } else {
+      setAlert({
+        success: false,
+        message: "Greška pri brisanju",
+      });
+      setLoading(false);
+      setDeleteModal(false);
     }
-
-    setNursesToChange([...ntc]);
   };
 
   const handleSave = async (e) => {
@@ -253,7 +260,9 @@ export default function Settings_Nurses() {
                   label="Na odeljenju"
                 />
               </FormGroup>
-              <DeleteForeverRounded onClick={(e) => handleDelete(e, index)} />
+              <DeleteForeverRounded
+                onClick={(e) => handleCallDelete(e, index)}
+              />
             </div>
           ))}
           <div className="NursesFooter">
@@ -317,6 +326,27 @@ export default function Settings_Nurses() {
             </>
           }
           setModal={setModal}
+        />
+      ) : null}
+      {deleteModal ? (
+        <Modal
+          content={
+            <>
+              <h3>Da li ste sigurni da želite da izbrišete ovu sestru?</h3>
+              <div className="Buttons">
+                <button
+                  className="MyButton"
+                  onClick={(e) => setDeleteModal(false)}
+                >
+                  Ne
+                </button>
+                <button className="MyButton" onClick={(e) => handleDelete()}>
+                  Da
+                </button>
+              </div>
+            </>
+          }
+          setModal={setDeleteModal}
         />
       ) : null}
       {alert !== undefined && alert !== null ? (
