@@ -82,6 +82,14 @@ export default function Settings_Nurses() {
 
     addNurseForChange(index);
   };
+  const handleInDepartmentChange = (e, index) => {
+    var n = nurses;
+    n[index].InDepartment = e.target.checked ? 1 : 0;
+
+    setNurses([...n]);
+
+    addNurseForChange(index);
+  };
   const addNurseForChange = (index) => {
     var n = nursesToChange;
     for (let i = 0; i < n.length; i++) {
@@ -234,6 +242,15 @@ export default function Settings_Nurses() {
                     />
                   }
                   label="Glavna"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={nurse.InDepartment === 1 ? true : false}
+                      onChange={(e) => handleInDepartmentChange(e, index)}
+                    />
+                  }
+                  label="Na odeljenju"
                 />
               </FormGroup>
               <DeleteForeverRounded onClick={(e) => handleDelete(e, index)} />
