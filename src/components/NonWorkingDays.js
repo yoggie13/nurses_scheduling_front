@@ -1,5 +1,6 @@
 import { FormControlLabel, FormGroup, Switch } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import functions from "../services/functions";
 import services from "../services/services";
 import AutoCompleteComponent from "./AutoCompleteComponent";
 import Loading from "./Loading";
@@ -58,10 +59,6 @@ export default function NonWorkingDays({
       });
     }
   };
-  const isValid = (field) => {
-    if (field === undefined || field === null) return false;
-    return true;
-  };
   const setDefault = () => {
     setNurse();
     setDay();
@@ -74,9 +71,9 @@ export default function NonWorkingDays({
     e.preventDefault();
 
     if (
-      !isValid(nurse) ||
-      !isValid(dateRange) ||
-      (allShifts && !isValid(day)) ||
+      !functions.isValidTextField(nurse) ||
+      !functions.isValidTextField(dateRange) ||
+      (allShifts && !functions.isValidTextField(day)) ||
       (!allShifts && !shiftPick[0] && !shiftPick[1] && !shiftPick[2])
     ) {
       setAlert({

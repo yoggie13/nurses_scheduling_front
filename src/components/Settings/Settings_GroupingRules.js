@@ -4,7 +4,9 @@ import {
 } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import functions from "../../services/functions";
 import services from "../../services/services";
+import settings_functions from "../../services/settings_functions";
 import AutoCompleteComponent from "../AutoCompleteComponent";
 import Loading from "../Loading";
 import Modal from "../Modal";
@@ -167,34 +169,34 @@ export default function Settings_GroupingRules() {
       setLoading(false);
     }
   };
-  const handleNameChange = (e, index) => {
-    var n = rules;
-    n[index].Name = e.target.value;
+  // const handleNameChange = (e, index) => {
+  //   var n = rules;
+  //   n[index].Name = e.target.value;
 
-    setRules([...n]);
+  //   setRules([...n]);
 
-    addRulesToChange(index);
-  };
-  const handleDurationChange = (e, index) => {
-    if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value)) return;
+  //   addRulesToChange(index);
+  // };
+  // const handleDurationChange = (e, index) => {
+  //   if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value)) return;
 
-    var n = rules;
-    n[index].Duration = e.target.value;
+  //   var n = rules;
+  //   n[index].Duration = e.target.value;
 
-    setRules([...n]);
+  //   setRules([...n]);
 
-    addRulesToChange(index);
-  };
-  const handleMaxChange = (e, index) => {
-    if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value)) return;
+  //   addRulesToChange(index);
+  // };
+  // const handleMaxChange = (e, index) => {
+  //   if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value)) return;
 
-    var n = rules;
-    n[index].Max = e.target.value;
+  //   var n = rules;
+  //   n[index].Max = e.target.value;
 
-    setRules([...n]);
+  //   setRules([...n]);
 
-    addRulesToChange(index);
-  };
+  //   addRulesToChange(index);
+  // };
   const addRulesToChange = (index) => {
     var n = rulesToChange;
     for (let i = 0; i < n.length; i++) {
@@ -215,11 +217,7 @@ export default function Settings_GroupingRules() {
     ) {
       var editData = [];
       for (let i = 0; i < rulesToChange.length; i++) {
-        if (
-          rules[rulesToChange[i]].Max === undefined ||
-          rules[rulesToChange[i]].Max === null ||
-          rules[rulesToChange[i]].Max === ""
-        ) {
+        if (!functions.isValidTextField(rules[rulesToChange[i]].Max)) {
           setAlert({
             success: false,
             message: "Dozvoljen broj ne može biti prazan",
@@ -257,19 +255,46 @@ export default function Settings_GroupingRules() {
                 <TextField
                   className="RuleName"
                   value={grule.Name}
-                  onChange={(e) => handleNameChange(e, index)}
+                  onChange={(e) =>
+                    settings_functions.updateTextState(
+                      rules,
+                      setRules,
+                      e.target.value,
+                      index,
+                      addRulesToChange,
+                      "Name"
+                    )
+                  }
                   label="Naziv"
                 />
                 <TextField
                   className="RuleNumber"
                   value={grule.Max}
-                  onChange={(e) => handleMaxChange(e, index)}
+                  onChange={(e) =>
+                    settings_functions.updateNumbersState(
+                      rules,
+                      setRules,
+                      e.target.value,
+                      index,
+                      addRulesToChange,
+                      "Max"
+                    )
+                  }
                   label="Dozvoljen broj"
                 />
                 <TextField
                   className="RuleNumber"
                   value={grule.Duration}
-                  onChange={(e) => handleDurationChange(e, index)}
+                  onChange={(e) =>
+                    settings_functions.updateNumbersState(
+                      rules,
+                      setRules,
+                      e.target.value,
+                      index,
+                      addRulesToChange,
+                      "Duration"
+                    )
+                  }
                   label="U koliko dana"
                 />
                 <ExpandCircleDownOutlined
@@ -312,11 +337,7 @@ export default function Settings_GroupingRules() {
           ))}
           <button
             className="MyButton"
-            disabled={
-              rulesToChange === undefined ||
-              rulesToChange === null ||
-              rulesToChange.length <= 0
-            }
+            disabled={functions.isEmptyArray(rulesToChange)}
             onClick={(e) => handleSave(e)}
           >
             Sačuvaj izmene

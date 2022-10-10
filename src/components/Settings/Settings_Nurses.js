@@ -10,6 +10,8 @@ import services from "../../services/services";
 import { DeleteForeverRounded } from "@mui/icons-material";
 import Modal from "../Modal";
 import Notification from "../Notification";
+import functions from "../../services/functions";
+import settings_functions from "../../services/settings_functions";
 
 export default function Settings_Nurses() {
   const [nurses, setNurses] = useState([]);
@@ -25,11 +27,6 @@ export default function Settings_Nurses() {
     Main: false,
   });
   const [deleteModal, setDeleteModal] = useState();
-
-  const isValid = (field) => {
-    if (field === undefined || field === null) return false;
-    return true;
-  };
 
   useEffect(() => {
     setLoading(true);
@@ -51,46 +48,7 @@ export default function Settings_Nurses() {
       });
     }
   };
-  const handleNameChange = (e, index) => {
-    var n = nurses;
-    n[index].Name = e.target.value;
 
-    setNurses([...n]);
-
-    addNurseForChange(index);
-  };
-  const handleSurnameChange = (e, index) => {
-    var n = nurses;
-    n[index].Surname = e.target.value;
-
-    setNurses([...n]);
-
-    addNurseForChange(index);
-  };
-  const handleExperienceChange = (e, index) => {
-    var n = nurses;
-    n[index].Experienced = e.target.checked ? 1 : 0;
-
-    setNurses([...n]);
-
-    addNurseForChange(index);
-  };
-  const handleMainChange = (e, index) => {
-    var n = nurses;
-    n[index].Main = e.target.checked ? 1 : 0;
-
-    setNurses([...n]);
-
-    addNurseForChange(index);
-  };
-  const handleInDepartmentChange = (e, index) => {
-    var n = nurses;
-    n[index].InDepartment = e.target.checked ? 1 : 0;
-
-    setNurses([...n]);
-
-    addNurseForChange(index);
-  };
   const addNurseForChange = (index) => {
     var n = nursesToChange;
     for (let i = 0; i < n.length; i++) {
@@ -131,11 +89,7 @@ export default function Settings_Nurses() {
   const handleSave = async (e) => {
     setLoading(true);
 
-    if (
-      nursesToChange !== undefined &&
-      nursesToChange !== null &&
-      nursesToChange.length > 0
-    ) {
+    if (!functions.isEmptyArray(nursesToChange)) {
       var editData = [];
       nursesToChange.forEach((nurse) => {
         editData.push(nurses[nurse]);
@@ -154,34 +108,15 @@ export default function Settings_Nurses() {
         });
       }
     }
-
-    if (
-      nursesToDelete !== undefined &&
-      nursesToDelete !== null &&
-      nursesToDelete.length > 0
-    ) {
-      var ret = await services.DeleteNurses(nursesToDelete);
-      if (ret !== undefined && ret.status === 200) {
-        setAlert({
-          success: true,
-          message: "Uspešno izbrisane sestre",
-        });
-        setLoading(false);
-      } else {
-        setAlert({
-          success: false,
-          message: "Greška pri brisanju",
-        });
-        setLoading(false);
-      }
-    } else {
-      setLoading(false);
-    }
+    setLoading(false);
   };
   const addNurse = async () => {
     setLoading(true);
 
-    if (!isValid(newNurse.Name) || !isValid(newNurse.Surname)) {
+    if (
+      !functions.isValidTextField(newNurse.Name) ||
+      !functions.isValidTextField(newNurse.Surname)
+    ) {
       setAlert({
         success: false,
         message: "Polja nisu popunjena kako treba",
@@ -222,12 +157,30 @@ export default function Settings_Nurses() {
             <div className="SettingsRow" key={nurse.NurseID}>
               <TextField
                 value={nurse.Name}
-                onChange={(e) => handleNameChange(e, index)}
+                onChange={(e) =>
+                  settings_functions.updateTextState(
+                    nurses,
+                    setNurses,
+                    e.target.value,
+                    index,
+                    addNurseForChange,
+                    "Name"
+                  )
+                }
                 label="Ime"
               />
               <TextField
                 value={nurse.Surname}
-                onChange={(e) => handleSurnameChange(e, index)}
+                onChange={(e) =>
+                  settings_functions.updateTextState(
+                    nurses,
+                    setNurses,
+                    e.target.value,
+                    index,
+                    addNurseForChange,
+                    "Surname"
+                  )
+                }
                 label="Prezime"
               />
 
@@ -236,7 +189,16 @@ export default function Settings_Nurses() {
                   control={
                     <Checkbox
                       checked={nurse.Experienced === 1 ? true : false}
-                      onChange={(e) => handleExperienceChange(e, index)}
+                      onChange={(e) =>
+                        settings_functions.updateBoolState(
+                          nurses,
+                          setNurses,
+                          e.target.checked,
+                          index,
+                          addNurseForChange,
+                          "Experienced"
+                        )
+                      }
                     />
                   }
                   label="Iskusna"
@@ -245,7 +207,16 @@ export default function Settings_Nurses() {
                   control={
                     <Checkbox
                       checked={nurse.Main === 1 ? true : false}
-                      onChange={(e) => handleMainChange(e, index)}
+                      onChange={(e) =>
+                        settings_functions.updateBoolState(
+                          nurses,
+                          setNurses,
+                          e.target.checked,
+                          index,
+                          addNurseForChange,
+                          "Main"
+                        )
+                      }
                     />
                   }
                   label="Glavna"
@@ -254,7 +225,16 @@ export default function Settings_Nurses() {
                   control={
                     <Checkbox
                       checked={nurse.InDepartment === 1 ? true : false}
-                      onChange={(e) => handleInDepartmentChange(e, index)}
+                      onChange={(e) =>
+                        settings_functions.updateBoolState(
+                          nurses,
+                          setNurses,
+                          e.target.checked,
+                          index,
+                          addNurseForChange,
+                          "InDepartment"
+                        )
+                      }
                     />
                   }
                   label="Na odeljenju"
@@ -271,14 +251,7 @@ export default function Settings_Nurses() {
             </button>
             <button
               className="MyButton"
-              disabled={
-                (nursesToChange === undefined ||
-                  nursesToChange === null ||
-                  nursesToChange.length <= 0) &&
-                (nursesToDelete === undefined ||
-                  nursesToDelete === null ||
-                  nursesToDelete.length <= 0)
-              }
+              disabled={functions.isEmptyArray(nursesToChange)}
               onClick={(e) => handleSave(e)}
             >
               Sačuvaj izmene

@@ -11,6 +11,7 @@ import SpecialNeedsShifts from "./SpecialNeedsShifts";
 import MustWorkTable from "./MustWorkTable";
 import SpecialNeedsShiftsTable from "./SpecialNeedsShiftsTable";
 import { TextField } from "@mui/material";
+import functions from "../services/functions";
 
 export default function CreateSchedule() {
   const [nurse, setNurse] = useState("");
@@ -27,11 +28,6 @@ export default function CreateSchedule() {
   const [inputChecked, setInputChecked] = useState(1);
   const [chosenMonth, setChosenMonth] = useState();
   const [year, setYear] = useState();
-
-  const isValid = (field) => {
-    if (field === undefined || field === null) return false;
-    return true;
-  };
 
   useEffect(() => {
     setLoading(true);
@@ -136,7 +132,7 @@ export default function CreateSchedule() {
   const deleteNurseDay = (e) => {
     e.preventDefault();
     var id = e.target.id;
-    if (id === undefined || id === null || id === "") {
+    if (!functions.isValidTextField(id)) {
       id = e.target.parentNode.id;
     }
     var n = nursesAndDays;
@@ -199,7 +195,7 @@ export default function CreateSchedule() {
     return data;
   };
   const handleSave = async (e) => {
-    if (!isValid(name)) {
+    if (!functions.isValidTextField(name)) {
       setAlert({
         success: false,
         message: "Nije unet naziv",

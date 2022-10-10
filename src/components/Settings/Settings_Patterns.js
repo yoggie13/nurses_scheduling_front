@@ -1,7 +1,9 @@
 import { TextField } from "@mui/material";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import functions from "../../services/functions";
 import services from "../../services/services";
+import settings_functions from "../../services/settings_functions";
 import Loading from "../Loading";
 import Notification from "../Notification";
 
@@ -31,22 +33,7 @@ export default function Settings_Patterns() {
       });
     }
   };
-  const handleNameChange = (e, index) => {
-    var n = patterns;
-    n[index].Name = e.target.value;
 
-    setPatterns([...n]);
-
-    addPaternsToChange(index);
-  };
-  const handleSymbolChange = (e, index) => {
-    var n = patterns;
-    n[index].Symbol = e.target.value;
-
-    setPatterns([...n]);
-
-    addPaternsToChange(index);
-  };
   const addPaternsToChange = (index) => {
     var n = patternsToChange;
     for (let i = 0; i < n.length; i++) {
@@ -57,36 +44,15 @@ export default function Settings_Patterns() {
     n.push(index);
     setPatternsToChange([...n]);
   };
-  const handleNumberChange = (e, index) => {
-    if (
-      e.target.value !== "" &&
-      (isNaN(parseFloat(e.target.value)) || /[a-zA-Z]/g.test(e.target.value))
-    )
-      return;
-    // if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value))
-    //     return;
 
-    var n = patterns;
-    n[index].Duration = e.target.value;
-
-    setPatterns([...n]);
-
-    addPaternsToChange(index);
-  };
   const handleSave = async (e) => {
     setLoading(true);
 
-    if (
-      patternsToChange !== undefined &&
-      patternsToChange !== null &&
-      patternsToChange.length > 0
-    ) {
+    if (!functions.isEmptyArray(patternsToChange)) {
       var editData = [];
       for (let i = 0; i < patternsToChange.length; i++) {
         if (
-          patterns[patternsToChange[i]].Duration === undefined ||
-          patterns[patternsToChange[i]].Duration === null ||
-          patterns[patternsToChange[i]].Duration === ""
+          !functions.isValidTextField(patterns[patternsToChange[i]].Duration)
         ) {
           setAlert({
             success: false,
@@ -124,30 +90,53 @@ export default function Settings_Patterns() {
               <TextField
                 className="ShiftName"
                 value={shift.Name}
-                onChange={(e) => handleNameChange(e, index)}
+                onChange={(e) =>
+                  settings_functions.updateTextState(
+                    patterns,
+                    setPatterns,
+                    e.target.value,
+                    index,
+                    addPaternsToChange,
+                    "Name"
+                  )
+                }
                 label="Naziv smene"
               />
               <TextField
                 className="ShiftDuration"
                 value={shift.Duration}
-                onChange={(e) => handleNumberChange(e, index)}
+                onChange={(e) =>
+                  settings_functions.updateFloatNumbersState(
+                    patterns,
+                    setPatterns,
+                    e.target.value,
+                    index,
+                    addPaternsToChange,
+                    "Duration"
+                  )
+                }
                 label="Trajanje smene"
               />
               <TextField
                 className="ShiftSymbol"
                 value={shift.Symbol}
-                onChange={(e) => handleSymbolChange(e, index)}
+                onChange={(e) =>
+                  settings_functions.updateTextState(
+                    patterns,
+                    setPatterns,
+                    e.target.value,
+                    index,
+                    addPaternsToChange,
+                    "Symbol"
+                  )
+                }
                 label="Simbol smene"
               />
             </div>
           ))}
           <button
             className="MyButton"
-            disabled={
-              patternsToChange === undefined ||
-              patternsToChange === null ||
-              patternsToChange.length <= 0
-            }
+            disabled={functions.isEmptyArray(patternsToChange)}
             onClick={(e) => handleSave(e)}
           >
             Sačuvaj izmene

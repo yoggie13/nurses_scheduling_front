@@ -4,7 +4,9 @@ import {
 } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import functions from "../../services/functions";
 import services from "../../services/services";
+import settings_functions from "../../services/settings_functions";
 import AutoCompleteComponent from "../AutoCompleteComponent";
 import Loading from "../Loading";
 import Modal from "../Modal";
@@ -167,14 +169,7 @@ export default function Settings_SequenceRules() {
       setLoading(false);
     }
   };
-  const handleNameChange = (e, index) => {
-    var n = rules;
-    n[index].Name = e.target.value;
 
-    setRules([...n]);
-
-    addRulesToChange(index);
-  };
   const addRulesToChange = (index) => {
     var n = rulesToChange;
     for (let i = 0; i < n.length; i++) {
@@ -188,11 +183,7 @@ export default function Settings_SequenceRules() {
   const handleSave = async (e) => {
     setLoading(true);
 
-    if (
-      rulesToChange !== undefined &&
-      rulesToChange !== null &&
-      rulesToChange.length > 0
-    ) {
+    if (!functions.isEmptyArray(rulesToChange)) {
       var editData = [];
       for (let i = 0; i < rulesToChange.length; i++) {
         editData.push(rules[rulesToChange[i]]);
@@ -225,7 +216,16 @@ export default function Settings_SequenceRules() {
                 <TextField
                   value={rule.Name}
                   className="RuleName"
-                  onChange={(e) => handleNameChange(e, index)}
+                  onChange={(e) =>
+                    settings_functions.updateTextState(
+                      rules,
+                      setRules,
+                      e.target.value,
+                      index,
+                      addRulesToChange,
+                      "Name"
+                    )
+                  }
                   label="Naziv"
                 />
                 <ExpandCircleDownOutlined
@@ -268,11 +268,7 @@ export default function Settings_SequenceRules() {
           ))}
           <button
             className="MyButton"
-            disabled={
-              rulesToChange === undefined ||
-              rulesToChange === null ||
-              rulesToChange.length <= 0
-            }
+            disabled={functions.isEmptyArray(rulesToChange)}
             onClick={(e) => handleSave(e)}
           >
             Sačuvaj izmene

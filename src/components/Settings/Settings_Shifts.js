@@ -1,7 +1,9 @@
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import functions from "../../services/functions";
 import services from "../../services/services";
+import settings_functions from "../../services/settings_functions";
 import Loading from "../Loading";
 import Notification from "../Notification";
 
@@ -46,11 +48,7 @@ export default function Settings_Shifts() {
   const handleSave = async (e) => {
     setLoading(true);
 
-    if (
-      shiftsToChange !== undefined &&
-      shiftsToChange !== null &&
-      shiftsToChange.length > 0
-    ) {
+    if (!functions.isEmptyArray(shiftsToChange)) {
       var editData = [];
       for (let i = 0; i < shiftsToChange.length; i++) {
         editData.push(shifts[shiftsToChange[i]]);
@@ -71,14 +69,7 @@ export default function Settings_Shifts() {
       }
     }
   };
-  const handleIntensityChange = (e, index) => {
-    var n = shifts;
-    n[index].StrongIntensity = e.target.checked ? 1 : 0;
 
-    setShifs([...n]);
-
-    addShiftsToChange(index);
-  };
   return (
     <>
       {loading ? (
@@ -93,7 +84,16 @@ export default function Settings_Shifts() {
                   control={
                     <Checkbox
                       checked={shift.StrongIntensity === 1 ? true : false}
-                      onChange={(e) => handleIntensityChange(e, index)}
+                      onChange={(e) =>
+                        settings_functions.updateBoolState(
+                          shifts,
+                          setShifs,
+                          e.target.checked,
+                          index,
+                          addShiftsToChange,
+                          "StrongIntensity"
+                        )
+                      }
                     />
                   }
                   label="Jak intenzitet"
@@ -103,11 +103,7 @@ export default function Settings_Shifts() {
           ))}
           <button
             className="MyButton"
-            disabled={
-              shiftsToChange === undefined ||
-              shiftsToChange === null ||
-              shiftsToChange.length <= 0
-            }
+            disabled={functions.isEmptyArray(shiftsToChange)}
             onClick={(e) => handleSave(e)}
           >
             Sačuvaj izmene

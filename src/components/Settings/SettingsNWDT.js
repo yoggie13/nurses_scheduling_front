@@ -6,6 +6,8 @@ import Loading from "../Loading";
 import Notification from "../Notification";
 import { DeleteForeverOutlined } from "@mui/icons-material";
 import Modal from "../Modal";
+import functions from "../../services/functions";
+import settings_functions from "../../services/settings_functions";
 
 export default function SettingsNWDT() {
   const [loading, setLoading] = useState(false);
@@ -24,11 +26,6 @@ export default function SettingsNWDT() {
     getTypes();
   }, []);
 
-  const isValid = (field) => {
-    if (field === undefined || field === null) return false;
-    return true;
-  };
-
   const getTypes = async () => {
     var res = await services.GetNWDTypes();
 
@@ -44,22 +41,7 @@ export default function SettingsNWDT() {
       });
     }
   };
-  const handleNameChange = (e, index) => {
-    var t = types;
-    t[index].Name = e.target.value;
 
-    setTypes([...t]);
-
-    addTypesToChange(index);
-  };
-  const handleSymbolChange = (e, index) => {
-    var t = types;
-    t[index].Symbol = e.target.value;
-
-    setTypes([...t]);
-
-    addTypesToChange(index);
-  };
   const addTypesToChange = (index) => {
     var n = typesToChange;
     for (let i = 0; i < n.length; i++) {
@@ -74,11 +56,7 @@ export default function SettingsNWDT() {
   const handleSave = async (e) => {
     setLoading(true);
 
-    if (
-      typesToChange !== undefined &&
-      typesToChange !== null &&
-      typesToChange.length > 0
-    ) {
+    if (!functions.isEmptyArray(typesToChange)) {
       var editData = [];
       for (let i = 0; i < typesToChange.length; i++) {
         editData.push(types[typesToChange[i]]);
@@ -118,30 +96,13 @@ export default function SettingsNWDT() {
       setLoading(false);
     }
   };
-  const handleNumberChange = (e, index) => {
-    if (
-      e.target.value !== "" &&
-      (isNaN(parseFloat(e.target.value)) || /[a-zA-Z]/g.test(e.target.value))
-    )
-      return;
-    // if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value))
-    //     return;
 
-    var t = types;
-    t[index].NumberOfHours = e.target.value;
-
-    setTypes([...t]);
-
-    addTypesToChange(index);
-  };
   const handleNewNumberChange = (e, index) => {
     if (
       e.target.value !== "" &&
       (isNaN(parseFloat(e.target.value)) || /[a-zA-Z]/g.test(e.target.value))
     )
       return;
-    // if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value))
-    //     return;
 
     setNewDay({ ...newDay, NumberOfHours: e.target.value });
   };
@@ -149,11 +110,10 @@ export default function SettingsNWDT() {
     setLoading(true);
     console.log(newDay.length);
     if (
-      newDay !== undefined &&
-      newDay !== null &&
-      isValid(newDay.Name) &&
-      isValid(newDay.Symbol) &&
-      isValid(newDay.NumberOfHours)
+      functions.isValidTextField(newDay) &&
+      functions.isValidTextField(newDay.Name) &&
+      functions.isValidTextField(newDay.Symbol) &&
+      functions.isValidTextField(newDay.NumberOfHours)
     ) {
       var res = await services.AddNewDay(newDay);
 
@@ -178,19 +138,46 @@ export default function SettingsNWDT() {
               <TextField
                 value={type.Name}
                 className="TypeName"
-                onChange={(e) => handleNameChange(e, index)}
+                onChange={(e) =>
+                  settings_functions.updateTextState(
+                    types,
+                    setTypes,
+                    e.target.value,
+                    index,
+                    addTypesToChange,
+                    "Name"
+                  )
+                }
                 label="Naziv"
               />
               <TextField
                 value={type.Symbol}
                 className="TypeSymbol"
-                onChange={(e) => handleSymbolChange(e, index)}
+                onChange={(e) =>
+                  settings_functions.updateTextState(
+                    types,
+                    setTypes,
+                    e.target.value,
+                    index,
+                    addTypesToChange,
+                    "Symbol"
+                  )
+                }
                 label="Simbol"
               />
               <TextField
                 value={type.NumberOfHours}
                 className="TypeSymbol"
-                onChange={(e) => handleNumberChange(e, index)}
+                onChange={(e) =>
+                  settings_functions.updateFloatNumbersState(
+                    types,
+                    setTypes,
+                    e.target.value,
+                    index,
+                    addTypesToChange,
+                    "NumberOfHours"
+                  )
+                }
                 label="Br. sati"
               />
               <DeleteForeverOutlined
@@ -204,11 +191,7 @@ export default function SettingsNWDT() {
             </button>
             <button
               className="MyButton"
-              disabled={
-                typesToChange === undefined ||
-                typesToChange === null ||
-                typesToChange.length <= 0
-              }
+              disabled={functions.isEmptyArray(typesToChange)}
               onClick={(e) => handleSave(e)}
             >
               Sačuvaj izmene

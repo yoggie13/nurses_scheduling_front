@@ -2,6 +2,7 @@ import { FormControlLabel, FormGroup, Switch, TextField } from "@mui/material";
 import React, { useState } from "react";
 import ShiftPicker from "./ShiftPicker";
 import Notification from "./Notification";
+import functions from "../services/functions";
 
 export default function SpecialNeedsShifts({
   handleSpecialNeedsShifts,
@@ -16,11 +17,8 @@ export default function SpecialNeedsShifts({
   const handleSubmit = async (e) => {
     if (
       (allShifts || shiftPick.includes(true)) &&
-      number !== undefined &&
-      number != null &&
-      number !== "" &&
-      dateRange !== undefined &&
-      dateRange !== null
+      functions.isValidTextField(number) &&
+      functions.isValidTextField(dateRange)
     ) {
       await handleSpecialNeedsShifts(
         allShifts === true ? "all" : shiftPick,

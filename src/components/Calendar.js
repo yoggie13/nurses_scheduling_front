@@ -3,6 +3,7 @@ import { Box, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AutoCompleteComponent from "./AutoCompleteComponent";
 import "../assets/styles/Calendar.css";
+import functions from "../services/functions";
 
 export default function Calendar({
   calendarDays,
@@ -72,7 +73,7 @@ export default function Calendar({
   });
 
   const getDaysOfTheChosenMonth = () => {
-    if (chosenMonth === undefined || chosenMonth === null) return [];
+    if (!functions.isValidTextField(chosenMonth)) return [];
     var date = new Date(year.label, chosenMonth.id, 1);
     var days = [];
     if (date.getDay() === 0) {
@@ -217,7 +218,7 @@ export default function Calendar({
           </Grid>
         </Grid>
         <Grid container spacing={2} columns={7}>
-          {chosenMonth === undefined || chosenMonth === null
+          {!functions.isValidTextField(chosenMonth)
             ? null
             : calendarDays.map((day, index) => (
                 <Grid item xs={1} id={index} key={index}>
