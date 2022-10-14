@@ -191,7 +191,7 @@ export default function Settings_GroupingRules() {
   //   if (e.target.value !== "" && !/^[0-9]+$/.test(e.target.value)) return;
 
   //   var n = rules;
-  //   n[index].Max = e.target.value;
+  //   n[index].MaxOccurences = e.target.value;
 
   //   setRules([...n]);
 
@@ -217,7 +217,9 @@ export default function Settings_GroupingRules() {
     ) {
       var editData = [];
       for (let i = 0; i < rulesToChange.length; i++) {
-        if (!functions.isValidTextField(rules[rulesToChange[i]].Max)) {
+        if (
+          !functions.isValidTextField(rules[rulesToChange[i]].MaxOccurences)
+        ) {
           setAlert({
             success: false,
             message: "Dozvoljen broj ne može biti prazan",
@@ -269,7 +271,7 @@ export default function Settings_GroupingRules() {
                 />
                 <TextField
                   className="RuleNumber"
-                  value={grule.Max}
+                  value={grule.MaxOccurences}
                   onChange={(e) =>
                     settings_functions.updateNumbersState(
                       rules,
@@ -277,7 +279,7 @@ export default function Settings_GroupingRules() {
                       e.target.value,
                       index,
                       addRulesToChange,
-                      "Max"
+                      "MaxOccurences"
                     )
                   }
                   label="Dozvoljen broj"
