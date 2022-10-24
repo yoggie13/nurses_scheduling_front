@@ -12,6 +12,7 @@ import MustWorkTable from "./MustWorkTable";
 import SpecialNeedsShiftsTable from "./SpecialNeedsShiftsTable";
 import { TextField } from "@mui/material";
 import functions from "../services/functions";
+import { useNavigate } from "react-router";
 
 export default function CreateSchedule() {
   const [nurse, setNurse] = useState("");
@@ -28,6 +29,8 @@ export default function CreateSchedule() {
   const [inputChecked, setInputChecked] = useState(1);
   const [chosenMonth, setChosenMonth] = useState();
   const [year, setYear] = useState();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -217,6 +220,7 @@ export default function CreateSchedule() {
         success: true,
         message: "Uspelo, uskoro izveštaj",
       });
+      navigate("/rasporedi");
     } else {
       setAlert({
         success: false,

@@ -17,6 +17,31 @@ export default function AllSchedules() {
     setLoading(true);
     getSchedules();
   }, []);
+  useEffect(() => {
+    if (schedules !== undefined && schedules !== null) checkForTodaysReport();
+  }, [schedules]);
+
+  const checkForTodaysReport = async () => {
+    var found = false;
+    for (let i = 0; i < schedules.length; i++) {
+      if (
+        schedules[i].IsGenerated === 0 &&
+        new Date(schedules[i].GeneratedOn).toLocaleDateString("sr-rs") ===
+          new Date().toLocaleDateString("sr-rs")
+      ) {
+        found = true;
+        break;
+      }
+    }
+    if (found) {
+      var intervalID = setInterval(async () => {
+        await getSchedules();
+      }, 60000);
+      setTimeout(() => {
+        clearInterval(intervalID);
+      }, 600000);
+    }
+  };
 
   const getSchedules = async () => {
     var res = await services.GetSchedules();
@@ -54,6 +79,7 @@ export default function AllSchedules() {
                 <th>Rb</th>
                 <th>Naziv</th>
                 <th>Datum generisanja</th>
+                <th>Generisan</th>
                 <th>Odabran</th>
                 <th>Link</th>
               </tr>
@@ -62,9 +88,16 @@ export default function AllSchedules() {
               {schedules.map((schedule, index) => (
                 <tr key={index}>
                   <td>{`${index + 1}.`}</td>
-                  <td>{schedule.Name}</td>
+                  <td>{schedule.NAME}</td>
                   <td>
                     {new Date(schedule.GeneratedOn).toLocaleDateString("sr-RS")}
+                  </td>
+                  <td>
+                    {schedule.IsGenerated > 0 ? (
+                      <CheckCircleIcon sx={{ color: "#00FF00" }} />
+                    ) : (
+                      <CancelRoundedIcon sx={{ color: "red" }} />
+                    )}
                   </td>
                   <td>
                     {schedule.Chosen === 1 ? (

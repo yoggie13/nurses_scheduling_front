@@ -95,6 +95,11 @@ export default function Schedule({ setScheduleName }) {
           }
         }
       }
+      if (nurDay.Days.length === 0) {
+        for (let i = 0; i < schedule.NumberOfDays; i++) {
+          row.push("");
+        }
+      }
       row.push(calculateNumberOfHours(nurDay.Days)[0]);
       row.push(calculateNumberOfHours(nurDay.Days)[1]);
       row.push(calculateNumberOfHours(nurDay.Days)[2]);
