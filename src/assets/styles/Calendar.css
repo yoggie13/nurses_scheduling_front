@@ -7,6 +7,16 @@
 #calendar-header *{
     font-weight: bold;
 }
+.CalendarMonthAndYear{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.CalendarMonthAndYear .AutoCompleteComponent{
+    width: 47.5%;
+}
 .Calendar .AutoCompleteComponent{
     margin-bottom: 30px;
 }
@@ -14,7 +24,10 @@
     background-color: pink;
     cursor: pointer;
 }
-.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemChecked.css-1lzrhuq-MuiPaper-root{
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemCheckedOptional.css-1lzrhuq-MuiPaper-root{
+    background-color: yellow;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemCheckedMandatory.css-1lzrhuq-MuiPaper-root{
     background-color: pink;
 }
 .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.ItemUnChecked.css-1lzrhuq-MuiPaper-root{

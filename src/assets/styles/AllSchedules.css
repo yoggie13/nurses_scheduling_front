@@ -1,0 +1,14 @@
+.AllSchedules{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.AllSchedulesTable{
+    width: 100%;
+}
+.AllSchedules .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root{
+    color:gray;
+}
+.AllSchedules .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root:hover{
+    color:rgb(248, 176, 188);
+}

@@ -1,0 +1,125 @@
+.CreateSchedule {
+    display: grid;
+    grid-template-columns: 40% 60%;
+}
+.DataInputPickerWrapper{
+    width: 600px;
+}
+.DataInputPicker {
+    list-style-type: none;
+    font-size: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 30px;
+    padding-bottom: 1px;
+    width: 100%;
+    overflow-x: auto;
+}
+.DataInputPicker li{
+    margin-right: 24px;
+}
+.DataInputPicker .checked {
+    text-decoration-line: underline;
+    text-decoration-color: pink;
+    text-decoration-thickness: 3px;
+}
+
+.DataInputPicker li:hover {
+    cursor: pointer;
+}
+
+.DataInput {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    margin-right: 40px;
+}
+
+.DataInput .AutoCompleteComponent {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.Tables{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    grid-column: 1/3;
+}
+.Tables div{
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root{
+    margin-bottom: 0;
+}
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root:hover{
+    cursor: pointer;
+    color: red;
+}
+
+.NursesAndDays,
+.MustWorkTable,
+.SpecialNeedShiftsTable{
+    width:100%;
+}
+
+.MyButton {
+    width: 120px;
+    height: 40px;
+    background-color: pink;
+    border-radius: 4px;
+    padding: 10px 20px 10px 20px;
+    border: 1px solid lightgray;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    align-self: flex-end;
+}
+
+.MyButton:hover {
+    cursor: pointer;
+    background-color: aquamarine;
+}
+
+.name-submit {
+    display: flex;
+    flex-direction: row;
+}
+
+.name-submit #standard-basic {
+    width: 400px;
+}
+
+.name-submit .MyButton {
+    margin-left: 30px;
+}
+.MuiFormControl-root.css-1nrlq1o-MuiFormControl-root {
+    text-align: left;
+}
+
+@media only screen and (max-width: 1300px) {
+    .CreateSchedule {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .DataInput {
+        margin-bottom: 25px;
+        margin-right: 0px;
+    }
+
+    .DataInput .AutoCompleteComponent {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+
+    .name-submit #standard-basic {
+        width: 220px;
+    }
+}
