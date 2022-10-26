@@ -3,13 +3,12 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import logo from './logo.svg';
 import './App.css';
-import CreateReport from './components/CreateReport';
-import AllReports from './components/AllReports';
+import CreateSchedule from './components/CreateSchedule';
 import Header from './components/Header';
-import ReportContainer from "./components/ReportContainer";
+import ScheduleContainer from "./components/ScheduleContainer";
 import Settings from "./components/Settings/Settings";
+import AllSchedules from "./components/AllSchedules";
 
 function App() {
   return (
@@ -17,10 +16,10 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path='/izvestaji/:reportID' element={<ReportContainer />} />
-          <Route path='/izvestaji' element={<AllReports />} />
+          <Route path='/rasporedi/:scheduleID' element={<ScheduleContainer />} />
+          <Route path='/rasporedi' element={<AllSchedules />} />
           <Route path='/podesavanja' element={<Settings />} />
-          <Route path='/' element={<CreateReport />} />
+          <Route path='/' element={<CreateSchedule />} />
         </Routes>
       </Router>
     </div >

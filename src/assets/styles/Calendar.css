@@ -7,6 +7,16 @@
 #calendar-header *{
     font-weight: bold;
 }
+.CalendarMonthAndYear{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.CalendarMonthAndYear .AutoCompleteComponent{
+    width: 47.5%;
+}
 .Calendar .AutoCompleteComponent{
     margin-bottom: 30px;
 }

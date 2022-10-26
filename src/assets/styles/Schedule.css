@@ -1,23 +1,27 @@
-.report-container-main{
+.schedule-container-main{
     display: flex;
     width: 100%;
     flex-direction: column;
 }
-.report-container-main .print-button{
+.schedule-container-main .print-button{
     align-self: flex-end;
 }
-.report-container{
+.schedule-container{
     overflow-x: auto;
     scroll-behavior: smooth;
 }
-.Report{
+.Schedule{
     padding: 0 1px 0 1px;
     min-width: 1200px;
 }
-.report-header{
+.schedule-header{
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+}
+.schedule-header .MyButton {
+    margin: 22.78px 0px 30px 0px;
 }
 .print-button{
     border: 1px solid black;
@@ -39,15 +43,18 @@
 .print-button .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root:hover{
     color:white;
 }
-.ReportTable{
+.ScheduleTable{
     width: 100%;
 }
-th:first-child{
+/* th:first-child{
     width:60px;
-}
-th:not(:first-child){
+} */
+/* th:not(:first-child){
     width: 30px;
     max-width:30px;
+} */
+th, td{
+    width: 32px;
 }
 .Signature{
     display: flex;
@@ -83,7 +90,17 @@ th:not(:first-child){
     margin: 10px 40px 20px 40px;
     size: 297mm 210mm;
   }
-
+.Buttons{
+    width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.schedule-text{
+    text-align: left;
+    font-weight: bold;
+    margin-top: 0px;
+}
   @media print{
     body{
         zoom: 0.55;

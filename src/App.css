@@ -41,18 +41,18 @@ table{
   color: gray;
   border-style: hidden; 
   border-collapse: collapse;
-  box-shadow: 0 0 0 1px lightgray; /* this draws the table border  */ 
+  box-shadow: 0 0 0 1px black; /* this draws the table border  */ 
   border-radius: 4px;
 }
 th,td{
-  border-left: 1px solid lightgray;
+  border-left: 1px solid black;
   padding-top: 10px;
   padding-bottom: 10px;
   text-align: center;
   height: 30px;
 }
 tr{
-  border: 1px solid lightgray;
+  border: 1px solid black;
 }
 table tr:last-child td:first-child{
   border-bottom-left-radius: 4px;

@@ -6,6 +6,7 @@ import Settings_SequenceRules from './Settings_SequenceRules'
 import Settings_Shifts from './Settings_Shifts'
 import Settings_GroupingRules from './Settings_GroupingRules'
 import Settings_Patterns from './Settings_Patterns'
+import SettingsNWDT from './SettingsNWDT'
 
 export default function Settings() {
     const [render, setRender] = useState(<Settings_Nurses />);
@@ -29,6 +30,9 @@ export default function Settings() {
                     </tr>
                     <tr>
                         <th id='patterns' className={'patterns' === chosenID ? 'ChosenTh' : 'NotChosenTh'} onClick={(e) => handleRender(e, <Settings_Patterns />)}>Paterni</th>
+                    </tr>
+                    <tr>
+                        <th id='nwdt' className={'nwdt' === chosenID ? 'ChosenTh' : 'NotChosenTh'} onClick={(e) => handleRender(e, <SettingsNWDT />)}>Slobodni dani</th>
                     </tr>
                     <tr>
                         <th id='sequence-rules' className={'sequence-rules' === chosenID ? 'ChosenTh' : 'NotChosenTh'} onClick={(e) => handleRender(e, <Settings_SequenceRules />)}>Pravila</th>

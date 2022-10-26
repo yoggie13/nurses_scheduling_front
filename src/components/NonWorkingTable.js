@@ -67,16 +67,16 @@ export default function NonWorkingTable({ nursesAndDays, deleteNurseDay }) {
                     {
                         formatNursesAndDays().map((nurse) => <><tr key={`[${nurse.NurseID},0]`}>
                             <td rowSpan={nurse.days.length}>{nurse.Nurse_Name}</td>
-                            <td>{nurse.days[0].DateFrom}</td>
-                            <td>{nurse.days[0].DateUntil}</td>
+                            <td>{nurse.days[0].DateFrom}.</td>
+                            <td>{nurse.days[0].DateUntil}.</td>
                             <td>{nurse.days[0].Day_Type_Label}</td>
                             <td>{nurse.days[0].IsMandatory}</td>
                             <td><DeleteForeverRounded id={`[${nurse.NurseID},0]`} onClick={e => deleteNurseDay(e)} /></td>
                         </tr>
                             {
                                 nurse.days.slice(1).map((day, index) => <tr key={`[${nurse.NurseID},${index + 1}]`}>
-                                    <td>{day.DateFrom}</td>
-                                    <td>{day.DateUntil}</td>
+                                    <td>{day.DateFrom}.</td>
+                                    <td>{day.DateUntil}.</td>
                                     <td>{day.Day_Type_Label}</td>
                                     <td>{day.IsMandatory}</td>
                                     <td><DeleteForeverRounded id={`[${nurse.NurseID},${index + 1}]`} onClick={e => deleteNurseDay(e)} /></td>

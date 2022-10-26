@@ -1,4 +1,4 @@
-.CreateReport {
+.CreateSchedule {
     display: grid;
     grid-template-columns: 40% 60%;
 }
@@ -101,7 +101,7 @@
 }
 
 @media only screen and (max-width: 1300px) {
-    .CreateReport {
+    .CreateSchedule {
         display: flex;
         flex-direction: column;
     }
