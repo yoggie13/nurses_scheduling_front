@@ -17,31 +17,31 @@ export default function AllSchedules() {
     setLoading(true);
     getSchedules();
   }, []);
-  useEffect(() => {
-    if (schedules !== undefined && schedules !== null) checkForTodaysReport();
-  }, [schedules]);
+  // useEffect(() => {
+  //   if (schedules !== undefined && schedules !== null) checkForTodaysReport();
+  // }, [schedules]);
 
-  const checkForTodaysReport = async () => {
-    var found = false;
-    for (let i = 0; i < schedules.length; i++) {
-      if (
-        schedules[i].IsGenerated === 0 &&
-        new Date(schedules[i].GeneratedOn).toLocaleDateString("sr-rs") ===
-          new Date().toLocaleDateString("sr-rs")
-      ) {
-        found = true;
-        break;
-      }
-    }
-    if (found) {
-      var intervalID = setInterval(async () => {
-        await getSchedules();
-      }, 60000);
-      setTimeout(() => {
-        clearInterval(intervalID);
-      }, 600000);
-    }
-  };
+  // const checkForTodaysReport = async () => {
+  //   var found = false;
+  //   for (let i = 0; i < schedules.length; i++) {
+  //     if (
+  //       schedules[i].IsGenerated === 0 &&
+  //       new Date(schedules[i].GeneratedOn).toLocaleDateString("sr-rs") ===
+  //         new Date().toLocaleDateString("sr-rs")
+  //     ) {
+  //       found = true;
+  //       break;
+  //     }
+  //   }
+  //   if (found) {
+  //     var intervalID = setInterval(async () => {
+  //       await getSchedules();
+  //     }, 60000);
+  //     setTimeout(() => {
+  //       clearInterval(intervalID);
+  //     }, 600000);
+  //   }
+  // };
 
   const getSchedules = async () => {
     var res = await services.GetSchedules();
